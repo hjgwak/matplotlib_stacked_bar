@@ -7,20 +7,20 @@ worksheet = workbook.sheet_by_index(0)
 nrows = worksheet.nrows
 ncols = worksheet.ncols
 
-row_val = []
-
 x_data = worksheet.row_values(0)[2:]
 y_data = worksheet.col_values(0)[1:]
 
-genus = set(worksheet.col_values(0)[1:])
-spacies = worksheet.col_values(1)[1:]
 
 genus_dic = {}
-spacies_dic = {}
 
-for row_num in range(nrows):
+table_sum = [0 for i in range(len(x_data))]
+
+for row_num in range(1,nrows):
 	current_genus = worksheet.row_values(row_num)[0]
-	current_spacies = worksheet.row_values(row_num)[1]
-	if(genus_dic.get(current_genus) == None) : 
-		genus_dic[current_genus] = {}		
-	genus_dic[current_genus][current_spacies]= worksheet.row_values(row_num)[2:]
+	current_type = worksheet.row_values(row_num)[1]
+	genus_dic[current_genus] = {}
+	genus_dic[current_genus]['type']= current_type
+	genus_dic[current_genus]['rate']= worksheet.row_values(row_num)[2:]
+	table_sum  = [i+j for i,j in zip(table_sum, worksheet.row_values(row_num)[2:])]
+
+
