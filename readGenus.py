@@ -1,5 +1,4 @@
 import xlrd
-import pandas as pd
 
 filename = 'crs_table_filtered_genus.xlsx'
 workbook = xlrd.open_workbook(filename)
@@ -16,10 +15,6 @@ y_data = worksheet.col_values(0)[1:]
 genus = set(worksheet.col_values(0)[1:])
 spacies = worksheet.col_values(1)[1:]
 
-
-# print x_data
-# print y_data
-
 genus_dic = {}
 spacies_dic = {}
 
@@ -29,6 +24,3 @@ for row_num in range(nrows):
 	if(genus_dic.get(current_genus) == None) : 
 		genus_dic[current_genus] = {}		
 	genus_dic[current_genus][current_spacies]= worksheet.row_values(row_num)[2:]
-
-
-
