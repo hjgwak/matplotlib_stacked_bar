@@ -4,7 +4,7 @@ import readSpecies as rs
 
 def run(genus) :
         # Create the general blog and the "subplots" i.e. the bars
-        f, ax1 = plt.subplots(1, figsize=(13,5))
+        f, ax1 = plt.subplots(1, figsize=(12,5))
 
         # Set the bar width
         bar_width = 0.35
@@ -13,9 +13,7 @@ def run(genus) :
         bar_l = [i+1 for i in range(len(rs.x_data))]
 
         bottom_data = [0 for i in range(len(rs.x_data))]
-
-        # genus = 'Acinetobacter'
-
+        
         # Create a bar plot, in position bar_l
         for n in range(len(rs.species_dic[genus])) :
                 keys = rs.species_dic[genus].keys()
@@ -39,5 +37,7 @@ def run(genus) :
 
         plt.show()
 
-
+if __name__ == "__main__":
+        genus_name = 'Acinetobacter'
+        run(genus_name)
 
