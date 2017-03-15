@@ -41,7 +41,7 @@ def on_click(event):
     if event.inaxes is not None:
         # print event.xdata, event.ydata
         genus, ty = rg.search_genus(event.xdata, event.ydata, bar_width)
-        if ty == 'Genus' :
+        if ty == 'genus' :
             sbp.run(genus)
         else :
             print ty ,"can be splited by species"

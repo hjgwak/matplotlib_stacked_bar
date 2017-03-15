@@ -1,6 +1,6 @@
 import xlrd
 
-filename = 'crs_table_filtered_genus.xlsx'
+filename = 'CRS_above_genus.xlsx'
 workbook = xlrd.open_workbook(filename)
 worksheet = workbook.sheet_by_index(0)
 

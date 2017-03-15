@@ -1,6 +1,6 @@
 import xlrd
 
-filename = 'crs_table_filtered_species.xlsx'
+filename = 'CRS_genus_species.xlsx'
 workbook = xlrd.open_workbook(filename)
 worksheet = workbook.sheet_by_index(0)
 
