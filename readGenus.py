@@ -32,20 +32,36 @@ for row_num in range(1,nrows):
 for row_num in range(1,nrows):
 	genus_dic[row_num]['rate']= [i/j*100 for i,j in zip(genus_dic[row_num]['rate'],table_sum)]
 	bottom_data[row_num] = [i/j*100 for i,j in zip(bottom_data[row_num], table_sum)]
-		
+
 def search_genus(x_, y_, width) :
 	
 	x = int(round(x_))
 
 	if x - width/2 < x_ and x_ < x + width/2 and x_ < len(x_data) - width/2:
-		# print x_data[x-1]
-		for n in range(1, nrows) :
-			if bottom_data[n-1][x-1] <= y_ and y_ <= bottom_data[n][x-1] :
-				return genus_dic[n]['name'], genus_dic[n]['type']
-	else :
+		if y_ <= bottom_data[nrows-1][x-1] :
+			y_genus_dic = bts(y_, 1, nrows-1, x-1)
+			return y_genus_dic['name'], y_genus_dic['type']
+		else :#out of y-aix data 
+			return None, None 
+	else : #out of x-aix data 
 		return None, None
    
 
+def bts(data, l, r, x) :
+
+	d = (r-l)/2
+
+	l_data = bottom_data[l][x]
+	r_data = bottom_data[r][x]
+	m_data = bottom_data[l+d][x]
+
+	if d < 1 :
+		return genus_dic[r]
+	if l_data <= data and data < m_data :
+		return bts(data, l, l+d, x)
+	else :
+		return bts(data, l+d,r, x)
+	
 
 
 

@@ -61,11 +61,12 @@ def on_plot_hover(event):
                   va="center", ha="left", bbox=dict(boxstyle="round", fc="w"), 
                   arrowprops=dict(arrowstyle="->", connectionstyle="arc3"))
             an.figure.canvas.draw()
-            plt.pause(0.5)
+            plt.pause(0.001)
             an.remove()
+            
     else:
         print 'Mouse overed ouside axes bounds but inside plot window'
-
+        
 
 f.canvas.mpl_connect('motion_notify_event', on_plot_hover)
 f.canvas.callbacks.connect('button_press_event', on_click)
