@@ -37,12 +37,12 @@ def search_genus(x_, y_, width) :
 	
 	x = int(round(x_))
 
-	if x - width/2 < x_ and x_ < x + width/2 and x_ < len(x_data) - width/2:
+	if x - width/2 < x_ and x_ < x + width/2 and x_ < ncols -1 - width/2:
 		if y_ <= bottom_data[nrows-1][x-1] :
 			y_genus_dic = bts(y_, 1, nrows-1, x-1)
-			return y_genus_dic['name'], y_genus_dic['type']
+			return x-1, y_genus_dic
 		else :#out of y-aix data 
-			return None, None 
+			return None, None
 	else : #out of x-aix data 
 		return None, None
    

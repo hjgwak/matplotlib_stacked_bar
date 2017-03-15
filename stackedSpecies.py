@@ -5,6 +5,8 @@ import readSpecies as rs
 def run(genus) :
         # Create the general blog and the "subplots" i.e. the bars
         f, ax1 = plt.subplots(1, figsize=(12,5))
+        plt.subplots_adjust(left=0.1, bottom=0.4, right=None, top=0.9,
+                    wspace=None, hspace=None)
 
         # Set the bar width
         bar_width = 0.35
@@ -33,11 +35,13 @@ def run(genus) :
         # Set the label and legends
         ax1.set_ylabel("Rate")
         ax1.set_xlabel(genus)
-        plt.legend(loc='best')
+        # plt.legend(loc='best')
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.3),
+          fancybox=True, shadow=True, ncol=5, fontsize = 9)
 
         plt.show()
 
 if __name__ == "__main__":
-        genus_name = 'Acinetobacter'
+        genus_name = 'Streptophyta'
         run(genus_name)
 

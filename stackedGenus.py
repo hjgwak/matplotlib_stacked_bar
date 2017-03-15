@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import readGenus as rg
-import stackedbarplot as sbp
+import stackedSpecies as ss
 
 
 # Create the general blog and the "subplots" i.e. the bars
@@ -40,23 +40,30 @@ plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1),
 def on_click(event):
     if event.inaxes is not None:
         # print event.xdata, event.ydata
-        genus, ty = rg.search_genus(event.xdata, event.ydata, bar_width)
-        if ty == 'genus' :
-            sbp.run(genus)
+        x, clicked_dic = rg.search_genus(event.xdata, event.ydata, bar_width)
+        if x == None :
+            print "out of bars"
         else :
-            print ty ,"can be splited by species"
+            if clicked_dic['type'] == 'genus' :
+                ss.run(clicked_dic['name'])
+            else :
+                print clicked_dic['type'] ,"can be splited by species"
     else:
         print 'Clicked ouside axes bounds but inside plot window'
 
 
 def on_plot_hover(event):
     if event.inaxes is not None:
-        genus, ty = rg.search_genus(event.xdata, event.ydata, bar_width)
-        if genus == None :
+        x, hovered_dic = rg.search_genus(event.xdata, event.ydata, bar_width)
+        if x == None :
             print "out of bars"
         else : 
-            print genus, ty
-            an = ax1.annotate("genus : "+genus +"\ntype:"+ty, xy=(event.xdata, event.ydata), xycoords="data",
+            # print "#",hovered_dic['name'], hovered_dic['type'] , round(hovered_dic['rate'][x],5)
+            name = hovered_dic['name']
+            ty = hovered_dic['type']
+            size = str(round(hovered_dic['rate'][x], 3))
+            an = ax1.annotate("genus : "+name+"\ntype:"+ty +"\nsize:"+size+"%", 
+                  xy=(event.xdata, event.ydata), xycoords="data",
                   xytext=(event.xdata+0.5, event.ydata), textcoords='data', 
                   va="center", ha="left", bbox=dict(boxstyle="round", fc="w"), 
                   arrowprops=dict(arrowstyle="->", connectionstyle="arc3"))
