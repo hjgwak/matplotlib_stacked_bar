@@ -18,18 +18,20 @@ def run(genus) :
 
         bottom_data = [0 for i in range(len(rs.x_data))]
         
-        colors = [(1,1,1)] + [(random(),random(),random()) for i in xrange(rs.nrows)]
+        colors = [(0.3+random()*0.6,0.3+random()*0.6,0.3+random()*0.6) for i in xrange(rs.nrows)]
+
 
         # Create a bar plot, in position bar_l
         for n in range(len(rs.species_dic[genus])) :
                 keys = rs.species_dic[genus].keys()
-                ax1.bar(bar_l, 
+
+                line = ax1.bar(bar_l, 
                 rs.species_dic[genus][keys[n]], 
                 width = bar_width, 
                 bottom = bottom_data,
                 label = keys[n], 
                 color = colors[n-1],
-                alpha = 0.5)
+                alpha = 0.8)
 
                 bottom_data  = [i+j for i,j in zip(bottom_data, rs.species_dic[genus][keys[n]])]
 
@@ -40,9 +42,8 @@ def run(genus) :
         # Set the label and legends
         ax1.set_ylabel("Rate")
         ax1.set_xlabel(genus)
-        # plt.legend(loc='best')
         plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.3),
-          fancybox=True, shadow=True, ncol=5, fontsize = 9)
+          fancybox=True, shadow=True, ncol=5, fontsize = 8)
 
         plt.show()
 
