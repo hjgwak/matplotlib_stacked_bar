@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import readSpecies as rs
+import matplotlib
+from random import random
 
 def run(genus) :
         # Create the general blog and the "subplots" i.e. the bars
@@ -16,6 +18,8 @@ def run(genus) :
 
         bottom_data = [0 for i in range(len(rs.x_data))]
         
+        colors = [(1,1,1)] + [(random(),random(),random()) for i in xrange(rs.nrows)]
+
         # Create a bar plot, in position bar_l
         for n in range(len(rs.species_dic[genus])) :
                 keys = rs.species_dic[genus].keys()
@@ -24,6 +28,7 @@ def run(genus) :
                 width = bar_width, 
                 bottom = bottom_data,
                 label = keys[n], 
+                color = colors[n-1],
                 alpha = 0.5)
 
                 bottom_data  = [i+j for i,j in zip(bottom_data, rs.species_dic[genus][keys[n]])]

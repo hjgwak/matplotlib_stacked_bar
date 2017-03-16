@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import readGenus as rg
 import stackedSpecies as ss
-
+import matplotlib
+from random import random
 
 # Create the general blog and the "subplots" i.e. the bars
 f, ax1 = plt.subplots(1, figsize=(12,6))
@@ -17,13 +18,16 @@ bar_l = [i+1 for i in range(len(rg.x_data))]
 
 bottom_data = [0 for i in range(len(rg.x_data))]
 
+colors = [(1,1,1)] + [(random(),random(),random()) for i in xrange(rg.nrows)]
+
 # Create a bar plot, in position bar_l
 for n in range(1, rg.nrows) :
     ax1.bar(bar_l, 
     rg.genus_dic[n]['rate'], 
     width = bar_width, 
     bottom = rg.bottom_data[n-1],
-    label = rg.genus_dic[n]['name'], 
+    label = rg.genus_dic[n]['name'],
+    color = colors[n], 
     alpha = 0.5)
 
 # set the x ticks with names

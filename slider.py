@@ -1,43 +1,13 @@
-#!/usr/bin/env python 
+from matplotlib.colors import LinearSegmentedColormap
+import colorsys
+import numpy as np
 
-class show_annotation(object): 
-    def __init__(self, annotations): 
-        '''"fake" class, mostly a "function with memory"''' 
-        self.annotations = annotations 
+#Create random HSV colors
+randHSVcolors = [(np.random.rand(),1,1) for i in xrange(10)]
 
-    def __call__(self, mouse_event): 
-        ax = mouse_event.inaxes 
-        if not ax: 
-            return 
-        line = ax.get_lines()[0] 
-        contained, infos = line.contains(mouse_event) 
-        if not contained:                                # eventually exited 
-            for annotation in self.annotations.values(): 
-                annotation.set_visible(False) 
-        else: 
-            xdata, ydata = line.get_data() 
-            ind = infos['ind'][0] 
-            annotation = self.annotations[xdata[ind], ydata[ind]] 
-            if not annotation.get_visible():             # is entered 
-                annotation.set_visible(True) 
-        ax.figure.canvas.draw() 
+# Convert HSV list to RGB
+randRGBcolors=[]
+for HSVcolor in randHSVcolors:
+  randRGBcolors.append(colorsys.hsv_to_rgb(HSVcolor[0],HSVcolor[1],HSVcolor[2]))
 
-if __name__ == '__main__': 
-    from random import randint 
-    x = range(10) 
-    y = [ randint(0, i) for i in x ] 
-    labels = [ 'label_%d' % i for i in x ] 
-
-    from matplotlib import pyplot 
-    fig = pyplot.figure() 
-    ax = fig.add_subplot(1, 1, 1) 
-    ax.plot(x, y) 
-
-    # waiting for a "dict comprehension" sintax 
-    annotations = {} 
-    for label, xe, ye in zip(labels, x, y): 
-        annotations[xe,ye] = ax.annotate(label, (xe,ye), visible=False) 
-
-    fig.canvas.mpl_connect('motion_notify_event', 
-            show_annotation(annotations)) 
-    pyplot.show() 
+random_colormap = LinearSegmentedColormap.from_list('new_map', randRGBcolors, N=10)
