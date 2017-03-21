@@ -1,9 +1,12 @@
 import scipy.stats as sci
 from sklearn.cluster.bicluster import SpectralBiclustering
 from matplotlib import pyplot as plt
+import matplotlib.patches as mpatches
+import matplotlib.lines as mlines
 
 import xlrd
 import numpy as np
+import pdb
 
 filename = 'CRS_above_genus.xlsx'
 # filename = 'small.xlsx'
@@ -34,6 +37,7 @@ all_data = {}
 all_data['data'] = []
 all_data['genus'] = []
 
+#extract data which have low pvalue
 for row_num in range(1,nrows):
 
 	current_genus = worksheet.row_values(row_num)[0]
@@ -48,7 +52,7 @@ for row_num in range(1,nrows):
 		test_case.append(worksheet.row_values(row_num)[2+casi])
 
 	pvalue = sci.ttest_ind(test_control, test_case, equal_var=True)[1]
-	# print pvalue
+
 	if pvalue < 0.05 :
 		all_data['data'].append(test_control+test_case)
 		all_data['genus'].append(current_genus+"("+str(current_type)[0]+")")
@@ -61,30 +65,58 @@ plt.title("Original dataset")
 plt.xticks(x_label, control+case, fontsize = 7)
 plt.yticks(y_label, all_data['genus'])
 
+#case value's axis color 
+def label_color(index,x_label, control) :
+
+	if x_label[index] >= len(control) :
+		return 'red'
+	else :
+		return 'black'
+
 
 def biclustering(all_data) :
+	f, ax1 = plt.subplots(1, figsize=(12,5))
+	plt.subplots_adjust(left=None, bottom=None, right=0.95, top=None,
+                    wspace=None, hspace=None)
+
 	n_clusters = (3, 2)
 
 	model = SpectralBiclustering(n_clusters=n_clusters, method='log', random_state=0)
 	data = np.asarray(all_data['data'])
 	model.fit(data)
 
+	#biclustering
 	fit_data = data[np.argsort(model.row_labels_)]
 	fit_data = fit_data[:, np.argsort(model.column_labels_)]
 
-	plt.matshow(fit_data, cmap=plt.cm.Blues)
+	ax1.matshow(fit_data, cmap=plt.cm.Blues)
 	plt.title("After biclustering; rearranged to show biclusters")
 
 	x_label = [i for i in np.argsort(model.column_labels_)]
 	y_label = [i for i in np.argsort(model.row_labels_)]
-
-	plt.xticks(x_label, control+case, fontsize = 7)
+	
+	ax1.set_xticks(x_label)
+	ax1.set_xticklabels(control+case, fontsize=7)
+	
+	colors = [label_color(i, x_label, control) for i in x_label]
+	
+	for color,tick in zip(colors,ax1.xaxis.get_major_ticks()):
+		tick.label1.set_color(color) #set the color property
+	
+	ax1.xaxis.set_ticks_position('bottom')
+	# plt.xticks(x_label, control+case, fontsize = 7)
 	plt.yticks(y_label, all_data['genus'])
 
 	# plt.matshow(np.outer(np.sort(model.row_labels_) + 1,
 	#                      np.sort(model.column_labels_) + 1),
 	#             cmap=plt.cm.Blues)
 	# plt.title("Checkerboard structure of rearranged data")
+	
+	#set legend
+	black_line = mlines.Line2D([], [], color='black',label='control')
+	red_line = mlines.Line2D([], [], color='red',label='case')
+	plt.legend(handles=[black_line, red_line],bbox_to_anchor=(1, 1.13), loc='upper right', borderaxespad=0.)
+
 
 if len(all_data) > 0 :
 	biclustering(all_data)
