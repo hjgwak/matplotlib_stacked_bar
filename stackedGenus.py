@@ -28,6 +28,21 @@ class Cursor(object):
             print 'Mouse overed ouside axes bounds but inside plot window'
 
 
+def on_click(event):
+    if event.inaxes is not None:
+        # print event.xdata, event.ydata
+        x, clicked_dic = rg.search_genus(event.xdata, event.ydata, bar_width)
+        if x == None :
+            print "out of bars"
+        else :
+            if clicked_dic['type'] == 'genus' :
+                ss.run(clicked_dic['name'])
+            else :
+                print clicked_dic['type'] ,"can be splited by species"
+    else:
+        print 'Clicked ouside axes bounds but inside plot window'
+
+
 # Create the general blog and the "subplots" i.e. the bars
 f, ax1 = plt.subplots(1, figsize=(12,6))
 plt.subplots_adjust(left=0.1, bottom=0.5, right=None, top=0.95,
@@ -42,7 +57,7 @@ bar_l = [i+1 for i in range(len(rg.x_data))]
 bottom_data = [0 for i in range(len(rg.x_data))]
 
 colors = [(0.3+random()*0.6,0.3+random()*0.6,0.3+random()*0.6) for i in xrange(rg.nrows)]
-# print colors
+
 # Create a bar plot, in position bar_l
 for n in range(1, rg.nrows) :
     gd = rg.genus_dic[n]
@@ -64,22 +79,6 @@ ax1.set_ylabel("Rate(%)")
 plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1),
           fancybox=True, shadow=True, ncol=6, fontsize = 7)
 
-
-def on_click(event):
-    if event.inaxes is not None:
-        # print event.xdata, event.ydata
-        x, clicked_dic = rg.search_genus(event.xdata, event.ydata, bar_width)
-        if x == None :
-            print "out of bars"
-        else :
-            if clicked_dic['type'] == 'genus' :
-                ss.run(clicked_dic['name'])
-            else :
-                print clicked_dic['type'] ,"can be splited by species"
-    else:
-        print 'Clicked ouside axes bounds but inside plot window'
-
-        
 cursor = Cursor(ax1)
 
 plt.connect('motion_notify_event', cursor.mouse_move)

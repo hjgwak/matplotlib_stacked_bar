@@ -1,12 +1,10 @@
 import scipy.stats as sci
 from sklearn.cluster.bicluster import SpectralBiclustering
 from matplotlib import pyplot as plt
-import matplotlib.patches as mpatches
 import matplotlib.lines as mlines
 
 import xlrd
 import numpy as np
-import pdb
 
 filename = 'CRS_above_genus.xlsx'
 # filename = 'small.xlsx'

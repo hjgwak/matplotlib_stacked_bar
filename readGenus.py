@@ -61,7 +61,3 @@ def bts(data, l, r, x) :
 		return bts(data, l, l+d, x)
 	else :
 		return bts(data, l+d,r, x)
-	
-
-
-
