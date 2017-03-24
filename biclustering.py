@@ -3,29 +3,21 @@ from sklearn.cluster.bicluster import SpectralBiclustering
 from matplotlib import pyplot as plt
 import matplotlib.lines as mlines
 
-import xlrd
+import csvReader
 import numpy as np
 
-filename = 'CRS_above_genus.xlsx'
-# filename = 'small.xlsx'
-workbook = xlrd.open_workbook(filename)
-worksheet = workbook.sheet_by_index(0)
 
-nrows = worksheet.nrows
-ncols = worksheet.ncols
+filename = 'CRS_above_genus.csv'
 
-x_data = worksheet.row_values(0)[2:]
-y_data = worksheet.col_values(0)[1:]
+#read csv file
+csv_list, nrows, ncols = csvReader.csv_reader(filename)
 
-#distribute control , case
-#case : 9, 21, 31, 49, 66, 27, 39, 42, 45, 47, 48, 57, 74
-# control : 7, 11, 17, 26, 33, 53, 58
+x_data = csv_list[0][2:]
 
 
-control = ['CRS_9','CRS_21','CRS_31','CRS_49','CRS_66','CRS_27','CRS_39','CRS_42','CRS_45',
+case = ['CRS_9','CRS_21','CRS_31','CRS_49','CRS_66','CRS_27','CRS_39','CRS_42','CRS_45',
 			'CRS_47','CRS_48','CRS_57','CRS_74']
-			#,'CRS_31','CRS_74','CRS_39']
-case = ['CRS_7','CRS_11','CRS_17','CRS_26','CRS_33','CRS_53','CRS_58']
+control = ['CRS_7','CRS_11','CRS_17','CRS_26','CRS_33','CRS_53','CRS_58']
 
 control_ind = []
 case_ind = []
@@ -44,17 +36,18 @@ all_data['genus'] = []
 #extract data which have low pvalue
 for row_num in range(1,nrows):
 
-	current_genus = worksheet.row_values(row_num)[0]
-	current_type = worksheet.row_values(row_num)[1]
+	current_genus = csv_list[row_num][0]
+	current_type = csv_list[row_num][1]
 	
 	test_control = []
 	test_case = []
 
 	for coni in control_ind :
-		test_control.append(worksheet.row_values(row_num)[2+coni])
+		test_control.append(csv_list[row_num][2+coni])
 	for casi in case_ind :
-		test_case.append(worksheet.row_values(row_num)[2+casi])
+		test_case.append(csv_list[row_num][2+casi])
 
+	# calculate pvalue
 	pvalue = sci.ttest_ind(test_control, test_case, equal_var=True)[1]
 
 	if pvalue < 0.05 :

@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import readSpecies as rs
 import matplotlib
 from random import random
+import searchGenusSpecies as sgs
 
 
 # Set the bar width
@@ -20,14 +21,14 @@ class Cursor(object):
 
     def mouse_move(self, event):
         if event.inaxes is not None:
-            x, hovered_dic = rs.search_species(event.xdata, event.ydata, bar_width, genus)
+            x, hovered_dic = sgs.search(event.xdata, event.ydata, bar_width, rs.species_dic[genus], rs.bottom_data[genus])
             if x == None :
                 print "out of bars"
             else : 
                 # print "#",hovered_dic['name'], hovered_dic['type'] , round(hovered_dic['rate'][x],5)
                 name = hovered_dic['name']
                 size = hovered_dic['rate'][x]
-                self.txt.set_text('name=%s\nsize=%s' % (name, size))
+                self.txt.set_text('name=%s\nsize=%1.3f' % (name, size))
                 plt.draw()
 
         else:
@@ -50,9 +51,8 @@ def run(genus) :
     
     colors = [(0.3+random()*0.6,0.3+random()*0.6,0.3+random()*0.6) for i in xrange(rs.nrows)]
 
-
     # Create a bar plot, in position bar_l
-    for n in range(1, len(rs.species_dic[genus])) :
+    for n in range(1, len(rs.species_dic[genus])+1) :
 
         ax1.bar(bar_l, 
             rs.species_dic[genus][n]['rate'], 
@@ -76,7 +76,7 @@ def run(genus) :
     plt.show()
 
 if __name__ == "__main__":
-        genus_name = 'Streptophyta'
+        genus_name = 'Methylobacterium'
         setGenus(genus_name)
         run(genus_name)
 

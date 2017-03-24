@@ -3,6 +3,7 @@ import readGenus as rg
 import stackedSpecies as ss
 import matplotlib
 from random import random
+import searchGenusSpecies as sgs
 
 class Cursor(object):
     def __init__(self, ax):
@@ -12,7 +13,7 @@ class Cursor(object):
 
     def mouse_move(self, event):
         if event.inaxes is not None:
-            x, hovered_dic = rg.search_genus(event.xdata, event.ydata, bar_width)
+            x, hovered_dic = sgs.search(event.xdata, event.ydata, bar_width, rg.genus_dic, rg.bottom_data)
             if x == None :
                 print "out of bars"
             else : 
@@ -30,7 +31,7 @@ class Cursor(object):
 def on_click(event):
     if event.inaxes is not None:
         # print event.xdata, event.ydata
-        x, clicked_dic = rg.search_genus(event.xdata, event.ydata, bar_width)
+        x, clicked_dic = sgs.search(event.xdata, event.ydata, bar_width, rg.genus_dic, rg.bottom_data)
         if x == None :
             print "out of bars"
         else :
