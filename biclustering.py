@@ -17,9 +17,15 @@ ncols = worksheet.ncols
 x_data = worksheet.row_values(0)[2:]
 y_data = worksheet.col_values(0)[1:]
 
-control = ['CRS_17','CRS_11','CRS_21','CRS_26','CRS_27','CRS_42','CRS_45','CRS_48','CRS_47',
-			'CRS_53','CRS_57','CRS_9','CRS_33','CRS_31','CRS_74','CRS_39']
-case = ['CRS_49','CRS_58','CRS_7']
+#distribute control , case
+#case : 9, 21, 31, 49, 66, 27, 39, 42, 45, 47, 48, 57, 74
+# control : 7, 11, 17, 26, 33, 53, 58
+
+
+control = ['CRS_9','CRS_21','CRS_31','CRS_49','CRS_66','CRS_27','CRS_39','CRS_42','CRS_45',
+			'CRS_47','CRS_48','CRS_57','CRS_74']
+			#,'CRS_31','CRS_74','CRS_39']
+case = ['CRS_7','CRS_11','CRS_17','CRS_26','CRS_33','CRS_53','CRS_58']
 
 control_ind = []
 case_ind = []
@@ -58,9 +64,15 @@ for row_num in range(1,nrows):
 x_label = [i for i in range(len(control+case))]
 y_label = [i for i in range(len(all_data['data']))]
 
-plt.matshow(all_data['data'], cmap=plt.cm.Blues)
+f, ax1 = plt.subplots(1, figsize=(12,5), dpi=80)
+
+plt.subplots_adjust(left=None, bottom=None, right=0.95, top=None,
+                    wspace=None, hspace=None)
+
+ax1.matshow(all_data['data'], cmap=plt.cm.Blues)
 plt.title("Original dataset")
 plt.xticks(x_label, control+case, fontsize = 7)
+ax1.xaxis.set_ticks_position('bottom')
 plt.yticks(y_label, all_data['genus'])
 
 #case value's axis color 
@@ -73,11 +85,11 @@ def label_color(index,x_label, control) :
 
 
 def biclustering(all_data) :
-	f, ax1 = plt.subplots(1, figsize=(12,5))
+	f, ax1 = plt.subplots(1, figsize=(12,5), dpi=80)
 	plt.subplots_adjust(left=None, bottom=None, right=0.95, top=None,
                     wspace=None, hspace=None)
 
-	n_clusters = (3, 2)
+	n_clusters = (2, 2)
 
 	model = SpectralBiclustering(n_clusters=n_clusters, method='log', random_state=0)
 	data = np.asarray(all_data['data'])

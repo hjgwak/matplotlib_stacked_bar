@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 import readSpecies as rs
 import matplotlib
 from random import random
@@ -17,7 +16,7 @@ class Cursor(object):
     def __init__(self, ax):
         self.ax = ax  
         # text location in axes coords
-        self.txt = ax.text(1.0, 0.0, '', fontsize = 7, transform=ax.transAxes, bbox={'facecolor':'lightgray', 'pad':8})
+        self.txt = ax.text(0.9, -0.25, '', fontsize = 7, transform=ax.transAxes, bbox={'facecolor':'lightgray', 'pad':8})
 
     def mouse_move(self, event):
         if event.inaxes is not None:
@@ -28,7 +27,7 @@ class Cursor(object):
                 # print "#",hovered_dic['name'], hovered_dic['type'] , round(hovered_dic['rate'][x],5)
                 name = hovered_dic['name']
                 size = hovered_dic['rate'][x]
-                self.txt.set_text('name=%s\nsize=%1.3f' % (name, size))
+                self.txt.set_text('name=%s\nsize=%s' % (name, size))
                 plt.draw()
 
         else:

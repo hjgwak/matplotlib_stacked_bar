@@ -1,27 +1,20 @@
-import xlrd
+import csvReader
 
-filename = 'CRS_genus_species.xlsx'
-workbook = xlrd.open_workbook(filename)
-worksheet = workbook.sheet_by_index(0)
+#read csv file
+csv_list, nrows, ncols = csvReader.csv_reader('CRS_genus_species.csv')
 
-nrows = worksheet.nrows
-ncols = worksheet.ncols
-
-x_data = worksheet.row_values(0)[2:]
-y_data = worksheet.col_values(0)[1:]
+x_data = csv_list[0][2:]
 
 species_dic = {}
-table_sum = {}
 bottom_data = {}
 
 for row_num in range(1, nrows):
-	current_genus = worksheet.row_values(row_num)[0]
-	current_spacies = worksheet.row_values(row_num)[1]
+	current_genus = csv_list[row_num][0]
+	current_spacies = csv_list[row_num][1]
 
 	if(species_dic.get(current_genus) == None) : 
 		n=1
 		species_dic[current_genus] = {}
-		table_sum[current_genus] = [0 for i in range(len(x_data))]
 		bottom_data[current_genus] = {}
 		bottom_data[current_genus][0] = [0 for i in range(len(x_data))]
 		n = n-1
@@ -32,12 +25,10 @@ for row_num in range(1, nrows):
 	species_dic[current_genus][n] = {}
 	# print species_dic[current_genus][n]
 
-	species_dic[current_genus][n]['rate']= worksheet.row_values(row_num)[2:]
+	species_dic[current_genus][n]['rate']= csv_list[row_num][2:]
 	species_dic[current_genus][n]['name']= current_spacies
 
-
-	table_sum[current_genus] = [i+j for i,j in zip(table_sum[current_genus], worksheet.row_values(row_num)[2:])]
-	bottom_data[current_genus][n] = table_sum[current_genus]
+	bottom_data[current_genus][n] = [i+float(j) for i,j in zip(bottom_data[current_genus][n-1], csv_list[row_num][2:])]
 
 
 def search_species(x_, y_, width, genus) :
