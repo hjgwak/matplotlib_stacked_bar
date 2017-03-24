@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 import readGenus as rg
 import stackedSpecies as ss
 import matplotlib
@@ -66,7 +65,7 @@ for n in range(1, rg.nrows) :
     gd['rate'], 
     width = bar_width, 
     bottom = rg.bottom_data[n-1],
-    label = gd['name'] +"("+str(gd['type'])[0]+")",
+    label = gd['name'] +"("+str(gd['type'])[0]+")", #genus(type)
     color = colors[n-1], 
     alpha = 0.8)
 

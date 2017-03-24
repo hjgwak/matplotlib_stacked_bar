@@ -1,7 +1,9 @@
 import csvReader
 
+filename = 'CRS_genus_species.csv'
+
 #read csv file
-csv_list, nrows, ncols = csvReader.csv_reader('CRS_genus_species.csv')
+csv_list, nrows, ncols = csvReader.csv_reader(filename)
 
 x_data = csv_list[0][2:]
 
@@ -10,7 +12,7 @@ bottom_data = {}
 
 for row_num in range(1, nrows):
 	current_genus = csv_list[row_num][0]
-	current_spacies = csv_list[row_num][1]
+	current_species = csv_list[row_num][1]
 
 	if(species_dic.get(current_genus) == None) : 
 		n=1
@@ -26,7 +28,7 @@ for row_num in range(1, nrows):
 	# print species_dic[current_genus][n]
 
 	species_dic[current_genus][n]['rate']= csv_list[row_num][2:]
-	species_dic[current_genus][n]['name']= current_spacies
+	species_dic[current_genus][n]['name']= current_species
 
 	bottom_data[current_genus][n] = [i+float(j) for i,j in zip(bottom_data[current_genus][n-1], csv_list[row_num][2:])]
 

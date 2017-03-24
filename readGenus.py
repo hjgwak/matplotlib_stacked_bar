@@ -1,14 +1,12 @@
-import xlrd
+# import xlrd
+import csvReader
 
-filename = 'CRS_above_genus.xlsx'
-workbook = xlrd.open_workbook(filename)
-worksheet = workbook.sheet_by_index(0)
+filename = 'CRS_above_genus.csv'
 
-nrows = worksheet.nrows
-ncols = worksheet.ncols
+#read csv file
+csv_list, nrows, ncols = csvReader.csv_reader(filename)
 
-x_data = worksheet.row_values(0)[2:]
-y_data = worksheet.col_values(0)[1:]
+x_data = csv_list[0][2:]
 
 genus_dic = {}
 
@@ -17,20 +15,20 @@ bottom_data = {}
 bottom_data[0] =[0 for i in range(len(x_data))]
 
 for row_num in range(1,nrows):
-	current_genus = worksheet.row_values(row_num)[0]
-	current_type = worksheet.row_values(row_num)[1]
+	current_genus = csv_list[row_num][0]
+	current_type = csv_list[row_num][1]
 	
 	genus_dic[row_num] = {}
 	genus_dic[row_num]['type']= current_type
-	genus_dic[row_num]['rate']= worksheet.row_values(row_num)[2:]
+	genus_dic[row_num]['rate']= csv_list[row_num][2:]
 	genus_dic[row_num]['name'] = current_genus
 
-	table_sum = [i+j for i,j in zip(table_sum, worksheet.row_values(row_num)[2:])]
+	table_sum = [i+float(j)for i,j in zip(table_sum, csv_list[row_num][2:])]
 	bottom_data[row_num] = table_sum
 
 #conver to percent
 for row_num in range(1,nrows):
-	genus_dic[row_num]['rate']= [i/j*100 for i,j in zip(genus_dic[row_num]['rate'],table_sum)]
+	genus_dic[row_num]['rate']= [float(i)/j*100 for i,j in zip(genus_dic[row_num]['rate'],table_sum)]
 	bottom_data[row_num] = [i/j*100 for i,j in zip(bottom_data[row_num], table_sum)]
 
 def search_genus(x_, y_, width) :
