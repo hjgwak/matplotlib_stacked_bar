@@ -1,4 +1,5 @@
 *.pyc
+*.xlsx
 .DS_Store
 ~$*
 plot_spectral_biclustering.py

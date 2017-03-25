@@ -39,6 +39,6 @@ def csv_reader(filename) :
 	return csv_list, nrows, ncols
 
 if __name__ == "__main__":
-	csv_reader('CRS_genus_species.csv')
+	csv_reader('control_case_group.csv')
 
 
