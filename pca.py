@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from extractFeature import load_bacterium
 from sklearn.decomposition import PCA, IncrementalPCA
 
-def run() :
-    bacterium = load_bacterium()
+def run(filename, group_filename) :
+    bacterium = load_bacterium(filename, group_filename)
     X = bacterium['data']
     y = bacterium['target']
     target_names = bacterium['target_names']
@@ -36,5 +36,7 @@ def run() :
     plt.show()
 
 if __name__ == "__main__":
-    run()
+    filename = 'CRS_above_genus.csv'
+    group_filename = 'control_case_group.csv'
+    run(filename, group_filename)
 

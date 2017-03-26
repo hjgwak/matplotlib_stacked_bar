@@ -68,9 +68,7 @@ def biclustering(all_data, control, case) :
 
 
 
-def run() :
-	filename = 'CRS_above_genus.csv'
-	group_filename = 'control_case_group.csv'
+def run(filename, group_filename) :
 	#read csv file
 	csv_list, nrows, ncols = csvReader.csv_reader(filename)
 
@@ -138,6 +136,8 @@ def run() :
 	plt.show()
 
 if __name__ == "__main__":
-    run()
+	filename = 'CRS_above_genus.csv'
+	group_filename = 'control_case_group.csv'
+	run(filename, group_filename)
 
 

@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import readSpecies as rs
+from readSpecies import loadData
 import matplotlib
 from random import random
 import searchGenusSpecies as sgs
@@ -12,6 +12,17 @@ def setGenus(genus_name) :
     global genus 
     genus =  genus_name
 
+#set data
+def setData(filename) :
+    global species_dic
+    global bottom_data
+    global nrows
+    global x_data
+
+    nrows, x_data, species_dic, bottom_data = loadData(filename)
+
+
+
 class Cursor(object):
     def __init__(self, ax):
         self.ax = ax  
@@ -20,7 +31,7 @@ class Cursor(object):
 
     def mouse_move(self, event):
         if event.inaxes is not None:
-            x, hovered_dic = sgs.search(event.xdata, event.ydata, bar_width, rs.species_dic[genus], rs.bottom_data[genus])
+            x, hovered_dic = sgs.search(event.xdata, event.ydata, bar_width, species_dic[genus], bottom_data[genus])
             if x == None :
                 print "out of bars"
             else : 
@@ -33,10 +44,10 @@ class Cursor(object):
         else:
             print 'Mouse overed ouside axes bounds but inside plot window'
 
-def run(genus) :
+def run(genus, filename) :
     
     setGenus(genus)
-
+    setData(filename)
     # Create the general blog and the "subplots" i.e. the bars
     f, ax1 = plt.subplots(1, figsize=(12,5))
     plt.subplots_adjust(left=0.1, bottom=0.4, right=None, top=0.9,
@@ -44,25 +55,23 @@ def run(genus) :
 
 
     # positions of the left bar-boundaries
-    bar_l = [i+1 for i in range(len(rs.x_data))]
-
-    bottom_data = [0 for i in range(len(rs.x_data))]
-    
-    colors = [(0.3+random()*0.6,0.3+random()*0.6,0.3+random()*0.6) for i in xrange(rs.nrows)]
+    bar_l = [i+1 for i in range(len(x_data))]
+ 
+    colors = [(0.3+random()*0.6,0.3+random()*0.6,0.3+random()*0.6) for i in xrange(nrows)]
 
     # Create a bar plot, in position bar_l
-    for n in range(1, len(rs.species_dic[genus])+1) :
+    for n in range(1, len(species_dic[genus])+1) :
 
         ax1.bar(bar_l, 
-            rs.species_dic[genus][n]['rate'], 
+            species_dic[genus][n]['rate'], 
             width = bar_width, 
-            bottom = rs.bottom_data[genus][n-1],
-            label = rs.species_dic[genus][n]['name'], 
+            bottom = bottom_data[genus][n-1],
+            label = species_dic[genus][n]['name'], 
             color = colors[n-1],
             alpha = 0.8)
 
     # set the x ticks with names
-    plt.xticks(bar_l, rs.x_data, fontsize = 7)
+    plt.xticks(bar_l, x_data, fontsize = 7)
 
     # Set the label and legends
     ax1.set_ylabel("Rate")
@@ -75,7 +84,7 @@ def run(genus) :
     plt.show()
 
 if __name__ == "__main__":
-        genus_name = 'Methylobacterium'
-        setGenus(genus_name)
-        run(genus_name)
+    genus_name = 'Methylobacterium'
+    filename = 'CRS_genus_species.csv'
+    run(genus_name, filename)
 

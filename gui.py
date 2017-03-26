@@ -1,5 +1,5 @@
 from PyQt4.QtGui import *
-import stackedSpecies 
+import stackedGenus 
 import biclustering
 import pca
  
@@ -29,19 +29,21 @@ class MyDialog(QDialog):
         #set layout to dialog
         self.setLayout(layout)
         btnOk.clicked.connect(self.btnOkClicked)
-        # self.cbo.currentIndexChanged.connect(self.selectionChanged)
 
     def btnOkClicked(self):
 	    txt = self.cbo.currentText()
 	    idx = self.cbo.currentIndex()
 	    # QMessageBox.information(self, "Info", txt,idx)
+	    genus_filename = 'CRS_above_genus.csv'
+	    species_filename = 'CRS_genus_species.csv'
+	    group_filename = 'control_case_group.csv'
 
 	    if idx == 0 : #Stacked Bar
-	    	stackedSpecies.run('Methylobacterium')
+	    	stackedGenus.run(genus_filename, species_filename)
 	    elif idx == 1 : #Biclustering
-	    	biclustering.run()
+	    	biclustering.run(genus_filename, group_filename)
 	    elif idx ==2 : #PCA
-	    	pca.run()
+	    	pca.run(genus_filename, group_filename)
 	    else :
 			QMessageBox.information(self, "Info", "ERROR")
 

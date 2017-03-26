@@ -1,9 +1,7 @@
 import csvReader
 import numpy as np
 
-def load_bacterium() :
-	filename = 'CRS_above_genus.csv'
-	group_filename = 'control_case_group.csv'
+def load_bacterium(filename, group_filename) :
 	#read csv file
 	csv_list, nrows, ncols = csvReader.csv_reader(filename)
 
