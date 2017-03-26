@@ -4,7 +4,6 @@ import matplotlib
 from random import random
 import searchGenusSpecies as sgs
 
-
 # Set the bar width
 bar_width = 0.35
 

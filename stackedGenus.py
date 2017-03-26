@@ -5,6 +5,9 @@ import matplotlib
 from random import random
 import searchGenusSpecies as sgs
 
+# Set the bar width
+bar_width = 0.35
+
 class Cursor(object):
     def __init__(self, ax):
         self.ax = ax  
@@ -43,45 +46,46 @@ def on_click(event):
         print 'Clicked ouside axes bounds but inside plot window'
 
 
-# Create the general blog and the "subplots" i.e. the bars
-f, ax1 = plt.subplots(1, figsize=(12,6))
-plt.subplots_adjust(left=0.1, bottom=0.5, right=None, top=0.95,
-                    wspace=None, hspace=None)
+def run() :
+    # Create the general blog and the "subplots" i.e. the bars
+    f, ax1 = plt.subplots(1, figsize=(12,6))
+    plt.subplots_adjust(left=0.1, bottom=0.5, right=None, top=0.95,
+                        wspace=None, hspace=None)
 
-# Set the bar width
-bar_width = 0.35
+    # positions of the left bar-boundaries
+    bar_l = [i+1 for i in range(len(rg.x_data))]
 
-# positions of the left bar-boundaries
-bar_l = [i+1 for i in range(len(rg.x_data))]
+    bottom_data = [0 for i in range(len(rg.x_data))]
 
-bottom_data = [0 for i in range(len(rg.x_data))]
+    colors = [(0.3+random()*0.6,0.3+random()*0.6,0.3+random()*0.6) for i in xrange(rg.nrows)]
 
-colors = [(0.3+random()*0.6,0.3+random()*0.6,0.3+random()*0.6) for i in xrange(rg.nrows)]
+    # Create a bar plot, in position bar_l
+    for n in range(1, rg.nrows) :
+        gd = rg.genus_dic[n]
 
-# Create a bar plot, in position bar_l
-for n in range(1, rg.nrows) :
-    gd = rg.genus_dic[n]
+        ax1.bar(bar_l, 
+        gd['rate'], 
+        width = bar_width, 
+        bottom = rg.bottom_data[n-1],
+        label = gd['name'] +"("+str(gd['type'])[0]+")", #genus(type)
+        color = colors[n-1], 
+        alpha = 0.8)
 
-    ax1.bar(bar_l, 
-    gd['rate'], 
-    width = bar_width, 
-    bottom = rg.bottom_data[n-1],
-    label = gd['name'] +"("+str(gd['type'])[0]+")", #genus(type)
-    color = colors[n-1], 
-    alpha = 0.8)
+    # set the x ticks with names
+    plt.xticks(bar_l, rg.x_data, fontsize = 7)
 
-# set the x ticks with names
-plt.xticks(bar_l, rg.x_data, fontsize = 7)
+    # Set the label and legends
+    ax1.set_ylabel("Rate(%)")
 
-# Set the label and legends
-ax1.set_ylabel("Rate(%)")
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1),
+              fancybox=True, shadow=True, ncol=6, fontsize = 7)
 
-plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1),
-          fancybox=True, shadow=True, ncol=6, fontsize = 7)
+    cursor = Cursor(ax1)
 
-cursor = Cursor(ax1)
+    plt.connect('motion_notify_event', cursor.mouse_move)
+    f.canvas.callbacks.connect('button_press_event', on_click)
 
-plt.connect('motion_notify_event', cursor.mouse_move)
-f.canvas.callbacks.connect('button_press_event', on_click)
+    plt.show()
 
-plt.show()
+if __name__ == "__main__":
+    run()
