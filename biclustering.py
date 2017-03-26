@@ -1,47 +1,11 @@
 import csvReader
 import scipy.stats as sci
 from sklearn.cluster.bicluster import SpectralBiclustering
-from matplotlib import pyplot as plt
-import matplotlib.lines as mlines
-
+import biclustering_draw as bd
 import numpy as np
+from matplotlib import pyplot as plt
 
-
-#xaxis color 
-def label_color(index,x_label, control) :
-	if x_label[index] >= len(control) :
-		return 'red'
-	else :
-		return 'black'
-
-def draw_graph(x_label, y_label, control, case, fit_data, genus_data, title) :
-	f, ax1 = plt.subplots(1, figsize=(12,5), dpi=80)
-
-	plt.subplots_adjust(left=None, bottom=None, right=0.95, top=None,
-	                    wspace=None, hspace=None)
-
-	ax1.matshow(fit_data, cmap=plt.cm.Blues)
-	
-	plt.title(title)
-	
-	ax1.set_xticks(x_label)
-	ax1.set_xticklabels(control+case, fontsize=7)
-	
-	colors = [label_color(i, x_label, control) for i in x_label]
-	
-	for color,tick in zip(colors,ax1.xaxis.get_major_ticks()):
-		tick.label1.set_color(color) #set the color property
-
-
-	ax1.xaxis.set_ticks_position('bottom')
-	plt.yticks(y_label, genus_data)
-
-	#set legend
-	black_line = mlines.Line2D([], [], color='black',label='control')
-	red_line = mlines.Line2D([], [], color='red',label='case')
-	plt.legend(handles=[black_line, red_line],bbox_to_anchor=(1, 1.13), loc='upper right', borderaxespad=0.)
-
-def biclustering(all_data, control, case) :
+def biclustering(all_data) :
 
 	n_clusters = (2, 2)
 
@@ -49,23 +13,33 @@ def biclustering(all_data, control, case) :
 	data = np.asarray(all_data['data'])
 	model.fit(data)
 
+	d1 = bd.draw_graph(control, case)
 	#biclustering
 	y_fit_data = data[np.argsort(model.row_labels_)]
-	fit_data = y_fit_data[:, np.argsort(model.column_labels_)]
+	d1.fit_data = y_fit_data[:, np.argsort(model.column_labels_)]
 
-	title = "After biclustering; rearranged to show biclusters"
+	d1.title = "After biclustering; rearranged to show biclusters"
 
-	x_label = [i for i in np.argsort(model.column_labels_)]
-	# > different order of real order
-	y_label = [i for i in np.argsort(model.row_labels_)]
+	#set x label
+	d1.x = np.argsort(model.column_labels_)
+	d1.x_label = [0 for i in range(len(d1.x))]
+	for n in range(len(d1.x)) :
+		d1.x_label[d1.x[n]] = n
+	d1.genus_data = all_data['genus']
+	d1.y_label = [i for i in np.argsort(model.row_labels_)]
 
-	draw_graph(x_label, y_label, control, case, fit_data, all_data['genus'], title)
+	d1.draw()
 
-	x_label = [i for i in range(len(control+case))]
-	title = "After biclustering; x domins are fixed"
+	# biclustering of fixed x-axis domain 
+	d2 = bd.draw_graph(control,case)
+	d2.x_label = [i for i in range(len(control+case))]
+	d2.y_label = d1.y_label
+	d2.fit_data = y_fit_data
+	d2.genus_data = all_data['genus']
+	d2.x = d2.x_label
+	d2.title = "After biclustering; fixed x domins "
 	
-	draw_graph(x_label, y_label, control, case, y_fit_data, all_data['genus'], title)
-
+	d2.draw()
 
 
 def run(filename, group_filename) :
@@ -76,9 +50,11 @@ def run(filename, group_filename) :
 
 	case_control_list, cc_nrows, cc_ncols = csvReader.csv_reader(group_filename)
 
-	case = []
-	control = []
+	global case 
+	global control
 
+	case = []
+	control = [] 
 	for n in range(1, cc_nrows) :
 		if case_control_list[n][1] == 'case' :
 			case.append(case_control_list[n][0])
@@ -98,6 +74,8 @@ def run(filename, group_filename) :
 	all_data = {}
 	all_data['data'] = []
 	all_data['genus'] = []
+
+	d3 = bd.draw_graph(control, case)
 
 	#extract data which have low pvalue
 	for row_num in range(1,nrows):
@@ -120,16 +98,19 @@ def run(filename, group_filename) :
 			all_data['data'].append(test_control+test_case)
 			all_data['genus'].append(current_genus+"("+str(current_type)[0]+")")
 
-	x_label = [i for i in range(len(control+case))]
-	y_label = [i for i in range(len(all_data['data']))]
 
-	title = "Original dataset"
+	d3.x_label = [i for i in range(len(control+case))]
+	d3.y_label = [i for i in range(len(all_data['data']))]
 
-	draw_graph(x_label, y_label, control, case, all_data['data'], all_data['genus'], title)
+	d3.fit_data = all_data['data']
+	d3.genus_data = all_data['genus']
+	d3.title = "Original dataset"
+	d3.x = d3.x_label
 
+	d3.draw()
 
 	if len(all_data) > 0 :
-		biclustering(all_data, control, case)
+		biclustering(all_data)
 	else :
 		print "no data"
 
