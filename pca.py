@@ -26,10 +26,10 @@ def run(filename, group_filename) :
 
         if "Incremental" in title:
             err = np.abs(np.abs(X_pca) - np.abs(X_ipca)).mean()
-            plt.title(title + " of iris dataset\nMean absolute unsigned error "
+            plt.title(title + " of bacterium dataset\nMean absolute unsigned error "
                       "%.6f" % err)
         else:
-            plt.title(title + " of iris dataset")
+            plt.title(title + " of bacterium dataset")
         plt.legend(loc="best", shadow=False, scatterpoints=1)
         plt.axis([-1, 1, -0.5, 0.5])
 
