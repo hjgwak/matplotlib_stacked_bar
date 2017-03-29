@@ -1,10 +1,13 @@
 # matplotlib_stacked_bar
 
 python -m pip install -U pip setuptools
-python -m pip install matplotlib
+sudo port install py27-pip
+sudo port install py27-readline
+sudo port select --set python python27
+sudo pip-2.7 install matplotlib
+
 pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
 pip install -U scikit-learn
-pip install xlrd
 sudo port install py27-pyqt4
 
 #VERSION INFO

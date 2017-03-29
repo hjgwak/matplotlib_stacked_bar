@@ -37,6 +37,7 @@ class MyDialog(QDialog):
        		self.upload_file_name.append(QLabel("__________________"))
         
         btnOk = QPushButton("OK")
+       
         # layout
         self.layout = QGridLayout()
         
