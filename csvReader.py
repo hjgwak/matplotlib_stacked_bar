@@ -1,4 +1,5 @@
 import csv 
+import re
 
 def is_number(num):
     try:
@@ -21,17 +22,18 @@ def distributedTypeList(cols) :
 
 def csv_reader(filename) :
 	f = open(filename, "r")
-	lines = f.read().split("\r") # "\r\n" if needed
+	lines = re.split("\r|\n", f.read())
 
 	csv_list = []
 	#distribute number and string
-
+	nrows = 0
 	for line in lines:
 	    if line != "": # add other needed checks to skip titles
-	        cols = line.split(",")
+	        cols = re.split("\t|,", line)
 	        csv_list.append(distributedTypeList(cols))
+	        nrows = nrows +1
 
-	nrows = len(lines)
+	# nrows = len(lines)
 	ncols = len(cols)
 
 	# print csv_list

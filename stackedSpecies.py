@@ -84,7 +84,7 @@ def run(genus, filename) :
     plt.show()
 
 if __name__ == "__main__":
-    genus_name = 'Methylobacterium'
-    filename = 'CRS_genus_species.csv'
+    genus_name = 'Moraxella'
+    filename = 'Total_CRS_species.csv'
     run(genus_name, filename)
 
