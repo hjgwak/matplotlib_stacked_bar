@@ -4,6 +4,7 @@ from sklearn.cluster.bicluster import SpectralBiclustering
 import biclustering_draw as bd
 import numpy as np
 from matplotlib import pyplot as plt
+from loadData import load_groupData
 
 def biclustering(all_data) :
 
@@ -43,28 +44,33 @@ def biclustering(all_data) :
 	d2.draw()
 
 
-def run(filename, group_filename) :
+def run(filename, group_filename, checked) :
 	#read csv file
+	print checked
 	csv_list, nrows, ncols = csvReader.csv_reader(filename)
 
 	x_data = csv_list[0][2:]
 
 	case_control_list, cc_nrows, cc_ncols = csvReader.csv_reader(group_filename)
 
+	group, group_names = load_groupData(group_filename)
+
+	print group, group_names
 	global group1 
 	global group2
 
 	group1 = []
 	group2 = [] 
+	
 	for n in range(1, cc_nrows) :
 		if case_control_list[n][1].lower() in 'case' :
 			group1.append(case_control_list[n][0])
 		else :
 			group2.append(case_control_list[n][0])
 
-	group2_ind = []
 	group1_ind = []
-
+	group2_ind = []
+	
 	#sort by order of control or case 
 	for n in range(len(x_data)-1) :
 		if n < len(group2) and x_data.count(group2[n]) == 1 :
@@ -124,6 +130,7 @@ def run(filename, group_filename) :
 if __name__ == "__main__":
 	filename = './data/Total_CRS_filtered.csv'
 	group_filename = './data/group_name.csv'
-	run(filename, group_filename)
+	checked = []
+	run(filename, group_filename, checked)
 
 

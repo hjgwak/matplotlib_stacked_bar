@@ -13,23 +13,30 @@ class CheckBox(QWidget):
     buttonList = []
 
     def __init__(self, parent = None):
-      super(CheckBox, self).__init__(parent)
+        super(CheckBox, self).__init__(parent)
         
     def create(self) :
         
-      layout = QHBoxLayout()
-      
-      self.btn = []
-      for n in range(len(self.buttonList)) :
-        self.btn.append(QCheckBox(self.buttonList[n]))
-        if n < 2 :
-            self.btn[n].setChecked(True)
-        self.btn[n].toggled.connect(lambda:self.btnstate(self.btn[n]))
-        layout.addWidget(self.btn[n])
+        layout = QHBoxLayout()
 
-      self.setLayout(layout)
-      self.setWindowTitle("select two groups")
+        btnOk = QPushButton("OK")
+        
+        self.btn = []
+        for n in range(len(self.buttonList)) :
+            self.btn.append(QCheckBox(self.buttonList[n]))
+            if n < 2 :
+                self.btn[n].setChecked(True)
+            self.btn[n].toggled.connect(lambda:self.btnstate(self.btn[n]))
+            layout.addWidget(self.btn[n])
+        
+        layout.addWidget(btnOk)
 
+        self.setLayout(layout)
+        self.setWindowTitle("select two groups")
+
+        btnOk.clicked.connect(self.btnOkClicked)
+
+    # just working
     def btnstate(self,b):
         for n in range(len(self.buttonList)) :
             if b.text() == self.buttonList[n] :
@@ -38,6 +45,15 @@ class CheckBox(QWidget):
                 else:
                     print b.text()+" is deselected"
     
+    def btnOkClicked(self) :
+        global checked
+        checked = []
+        for n in range(len(self.buttonList)) :
+            if self.btn[n].isChecked() == True :
+                checked.append(self.btn[n].text())
+        self.close()
+
+
 class MyDialog(QDialog):
     def __init__(self):
         QDialog.__init__(self)
@@ -123,11 +139,11 @@ class MyDialog(QDialog):
     def btnOkClicked(self):
 	    txt = self.cbo.currentText()
 	    idx = self.cbo.currentIndex()
-        
+
 	    if idx == 0 : #Stacked Bar
 	    	stackedGenus.run(self.genus_filename, self.species_filename)
 	    elif idx == 1 : #Biclustering
-	    	biclustering.run(self.genus_filename, self.group_filename)
+	    	biclustering.run(self.genus_filename, self.group_filename, checked)
 	    elif idx ==2 : #PCA
 	    	pca.run(self.genus_filename, self.group_filename)
 	    else :
