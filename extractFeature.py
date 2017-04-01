@@ -1,35 +1,23 @@
 import csvReader
 import numpy as np
+from loadData import load_groupData
 
 def load_bacterium(filename, group_filename) :
 	#read csv file
 	csv_list, nrows, ncols = csvReader.csv_reader(filename)
 
-	x_data = csv_list[0][2:]
-
 	#read group file
-	case_control_list, cc_nrows, cc_ncols = csvReader.csv_reader(group_filename)
-		
-	group = {}
-	group_names = []
-
-	for n in range(1, cc_nrows) :
-		if not case_control_list[n][1].lower() in group_names :
-			group_names.append(case_control_list[n][1].lower())
-
-		group[case_control_list[n][0]] = group_names.index(case_control_list[n][1].lower())
+	group, group_names = load_groupData(group_filename)
 
 	bacterium = {}
 	sample_data = []
 	group_id = []
 	sample_names = []
 
-
 	for col_num in range(2, ncols) : 
 		sample_name = csv_list[0][col_num]
 		group_id.append(group[sample_name])
 		sample_names.append(sample_name)
-		# sample[sample_name] = group[sample_name]
 		
 		data = []
 

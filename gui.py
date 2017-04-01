@@ -1,11 +1,43 @@
 from PyQt4.QtGui import *
+from PyQt4.QtCore import *
 import sys
 import os
 
 import stackedGenus 
 import biclustering
 import pca
- 
+from loadData import load_groupData
+
+class CheckBox(QWidget):
+
+    buttonList = []
+
+    def __init__(self, parent = None):
+      super(CheckBox, self).__init__(parent)
+        
+    def create(self) :
+        
+      layout = QHBoxLayout()
+      
+      self.btn = []
+      for n in range(len(self.buttonList)) :
+        self.btn.append(QCheckBox(self.buttonList[n]))
+        if n < 2 :
+            self.btn[n].setChecked(True)
+        self.btn[n].toggled.connect(lambda:self.btnstate(self.btn[n]))
+        layout.addWidget(self.btn[n])
+
+      self.setLayout(layout)
+      self.setWindowTitle("select two groups")
+
+    def btnstate(self,b):
+        for n in range(len(self.buttonList)) :
+            if b.text() == self.buttonList[n] :
+                if b.isChecked() == True :
+                    print b.text()+" is selected"
+                else:
+                    print b.text()+" is deselected"
+    
 class MyDialog(QDialog):
     def __init__(self):
         QDialog.__init__(self)
@@ -57,6 +89,8 @@ class MyDialog(QDialog):
         btnUpload[2].clicked.connect(self.btnUploadClicked_group)
         btnOk.clicked.connect(self.btnOkClicked)
 
+        self.cbo.currentIndexChanged.connect(self.selectionChanged)
+    
     #file upload
     def btnUploadClicked_genus(self) :
     	self.genus_filename = QFileDialog.getOpenFileName(self, 'Open File', './data', '(*.csv)')
@@ -77,16 +111,19 @@ class MyDialog(QDialog):
         self.upload_file_name[2].setText(filename)
         self.setLayout(self.layout)
 
-   
+    #biclustering needs 2 groups
+    def selectionChanged(self):
+        idx = self.cbo.currentIndex()
+        if idx == 1 :
+            ex = CheckBox()
+            x, ex.buttonList = load_groupData(self.group_filename)
+            ex.create()
+            ex.show()
 
     def btnOkClicked(self):
 	    txt = self.cbo.currentText()
 	    idx = self.cbo.currentIndex()
-
-	    # genus_filename = 'CRS_above_genus.csv'
-	    # species_filename = 'CRS_genus_species.csv'
-	    # group_filename = 'control_case_group.csv'
-
+        
 	    if idx == 0 : #Stacked Bar
 	    	stackedGenus.run(self.genus_filename, self.species_filename)
 	    elif idx == 1 : #Biclustering

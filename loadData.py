@@ -1,5 +1,20 @@
 import csvReader
 
+def load_groupData(group_filename) :
+	#read group file
+	csv_list, nrows, ncols = csvReader.csv_reader(group_filename)
+		
+	group = {}
+	group_names = []
+
+	for n in range(1, nrows) :
+		if not csv_list[n][1].lower() in group_names :
+			group_names.append(csv_list[n][1].lower())
+
+		group[csv_list[n][0]] = group_names.index(csv_list[n][1].lower())
+
+	return group, group_names
+
 def load_genusData(filename) :
 	#read csv file
 	csv_list, nrows, ncols = csvReader.csv_reader(filename)

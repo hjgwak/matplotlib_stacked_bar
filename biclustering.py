@@ -13,7 +13,7 @@ def biclustering(all_data) :
 	data = np.asarray(all_data['data'])
 	model.fit(data)
 
-	d1 = bd.draw_graph(control, case)
+	d1 = bd.draw_graph(group2, group1)
 	#biclustering
 	y_fit_data = data[np.argsort(model.row_labels_)]
 	d1.fit_data = y_fit_data[:, np.argsort(model.column_labels_)]
@@ -31,8 +31,8 @@ def biclustering(all_data) :
 	d1.draw()
 
 	# biclustering of fixed x-axis domain 
-	d2 = bd.draw_graph(control,case)
-	d2.x_label = [i for i in range(len(control+case))]
+	d2 = bd.draw_graph(group2,group1)
+	d2.x_label = [i for i in range(len(group2+group1))]
 	d2.y_label = [i for i in np.argsort(model.row_labels_)]
 	d2.pvalue_label = all_data['pvalue']
 	d2.fit_data = y_fit_data
@@ -51,33 +51,33 @@ def run(filename, group_filename) :
 
 	case_control_list, cc_nrows, cc_ncols = csvReader.csv_reader(group_filename)
 
-	global case 
-	global control
+	global group1 
+	global group2
 
-	case = []
-	control = [] 
+	group1 = []
+	group2 = [] 
 	for n in range(1, cc_nrows) :
 		if case_control_list[n][1].lower() in 'case' :
-			case.append(case_control_list[n][0])
+			group1.append(case_control_list[n][0])
 		else :
-			control.append(case_control_list[n][0])
+			group2.append(case_control_list[n][0])
 
-	control_ind = []
-	case_ind = []
+	group2_ind = []
+	group1_ind = []
 
 	#sort by order of control or case 
 	for n in range(len(x_data)-1) :
-		if n < len(control) and x_data.count(control[n]) == 1 :
-			control_ind.append(x_data.index(control[n]))
-		if n < len(case) and x_data.count(case[n]) == 1 :
-			case_ind.append(x_data.index(case[n]))
+		if n < len(group2) and x_data.count(group2[n]) == 1 :
+			group2_ind.append(x_data.index(group2[n]))
+		if n < len(group1) and x_data.count(group1[n]) == 1 :
+			group1_ind.append(x_data.index(group1[n]))
 
 	all_data = {}
 	all_data['data'] = []
 	all_data['genus'] = []
 	all_data['pvalue'] = []
 
-	d3 = bd.draw_graph(control, case)
+	d3 = bd.draw_graph(group2, group1)
 
 	#extract data which have low pvalue
 	for row_num in range(1,nrows):
@@ -85,25 +85,25 @@ def run(filename, group_filename) :
 		current_genus = csv_list[row_num][0]
 		current_type = csv_list[row_num][1]
 		
-		test_control = []
-		test_case = []
+		test_group2 = []
+		test_group1 = []
 
-		for coni in control_ind :
-			test_control.append(csv_list[row_num][2+coni])
-		for casi in case_ind :
-			test_case.append(csv_list[row_num][2+casi])
+		for coni in group2_ind :
+			test_group2.append(csv_list[row_num][2+coni])
+		for casi in group1_ind :
+			test_group1.append(csv_list[row_num][2+casi])
 
 		# calculate pvalue
-		pvalue = sci.ttest_ind(test_control, test_case, equal_var=True)[1]
+		pvalue = sci.ttest_ind(test_group2, test_group1, equal_var=True)[1]
 
 		if pvalue < 0.05 :
-			all_data['data'].append(test_control+test_case)
+			all_data['data'].append(test_group2+test_group1)
 			all_data['genus'].append(current_genus+"("+str(current_type)[0]+")")
 			all_data['pvalue'].append(round(pvalue,4))
 
 
 
-	d3.x_label = [i for i in range(len(control+case))]
+	d3.x_label = [i for i in range(len(group2+group1))]
 	d3.y_label = [i for i in range(len(all_data['data']))]
 	d3.pvalue_label = all_data['pvalue']
 
