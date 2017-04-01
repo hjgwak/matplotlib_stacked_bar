@@ -17,24 +17,24 @@ def set_genusData(filename) :
 
 
 #set data
-def set_speciesData(filename) :
+def set_speciesData(filename, gfilename) :
     global species_dic
     global bottom_data
     global nrows
     global x_data
 
-    nrows, x_data, species_dic, bottom_data = load_speciesData(filename)
+    nrows, x_data, species_dic, bottom_data = load_speciesData(filename, gfilename)
 
 
-def setSpeciesFile(filename) :
-    global species_filename 
-    species_filename =  filename
+def setFileName(sfilename, gfilename) :
+    global species_filename, genus_filename 
+    species_filename = sfilename 
+    genus_filename = gfilename
 
 #set global genus
 def setGenus(genus_name) :
     global genus 
     genus =  genus_name
-
 
 def on_click(event):
     if event.inaxes is not None:
@@ -44,18 +44,33 @@ def on_click(event):
             print "out of bars"
         else :
             if clicked_dic['type'] == 'genus' :
-                stackedSpecies.run(clicked_dic['name'], species_filename)
+                stackedSpecies.run(clicked_dic['name'], species_filename, genus_filename)
             else :
                 print clicked_dic['type'] ,"can be splited by species"
     else:
         print 'Clicked ouside axes bounds but inside plot window'
 
+# class Click(object) :
+#     sample_names  = []
+#     X_pca = []
+    
+#     # def __init__(self, ax):
+#     #     self.ax = ax  
+
+#     def pca_show(self, event):
+#         for label, x, y in zip(self.sample_names, self.X_pca[:,0], self.X_pca[:,1]):
+#             plt.annotate( label, xy=(x, y), xytext=(-2, 2), textcoords='offset points',
+#                 ha='right', va='bottom', fontsize = 6, color = 'gray')
+
+#         plt.draw()
 
 class Cursor(object):
+    
     def __init__(self, ax):
         self.ax = ax  
         # text location in axes coords
         self.txt = ax.text(0.9, 1.06, '', fontsize = 7, transform=ax.transAxes, bbox={'facecolor':'lightgray', 'pad':8})
+        
 
     def mouse_move_genus(self, event):
         if event.inaxes is not None:
@@ -96,23 +111,6 @@ class Cursor(object):
             # print 'Mouse overed ouside axes bounds but inside plot window'
         plt.draw()
 
-    def mouse_move_pca(self, event):
-        if event.inaxes is not None:
-            
-            self.txt.set_text('%f , %f'%(event.xdata ,event.ydata))
-            plt.draw()
 
-            # if x == None :
-            #     print "out of scatters"
-            # else : 
-            #     # print "#",hovered_dic['name'], hovered_dic['type'] , round(hovered_dic['rate'][x],5)
-            #     name = hovered_dic['name']
-            #     self.txt.set_text('name='+name)
-            #     plt.draw()
-
-        else:
-            self.txt.set_text('ouside axes bounds')
-        plt.draw()
-            # print 'Mouse overed ouside axes bounds but inside plot window'
 
 

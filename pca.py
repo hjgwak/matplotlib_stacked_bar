@@ -3,15 +3,14 @@ import matplotlib.pyplot as plt
 from extractFeature import load_bacterium
 from sklearn.decomposition import PCA
 
+
 def run(filename, group_filename) :
     
     bacterium = load_bacterium(filename, group_filename)
     X = bacterium['data']
     y = bacterium['group_id']
     group_names = bacterium['group_names']
-    sample_names = bacterium['sample']
-
-    # print X,y
+    
     n_components = 2
     
     pca = PCA(n_components=n_components)
@@ -30,9 +29,11 @@ def run(filename, group_filename) :
         plt.legend(loc="best", shadow=False, scatterpoints=1)
         plt.axis([-1, 1, -0.5, 0.5])
 
-    for label, x, y in zip(sample_names, X_transformed[:,0], X_transformed[:,1]):
-        plt.annotate( label, xy=(x, y), xytext=(-2, 2), textcoords='offset points', ha='right', va='bottom' ,
-            fontsize = 6, color = 'gray')
+
+    #set annotation
+    for label, x, y in zip(bacterium['sample'], X_pca[:,0], X_pca[:,1]):
+        plt.annotate( label, xy=(x, y), xytext=(-2, 2), textcoords='offset points',
+            ha='right', va='bottom', fontsize = 6, color = 'gray')
 
     plt.show()
 

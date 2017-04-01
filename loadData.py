@@ -31,10 +31,22 @@ def load_genusData(filename) :
 
 	return nrows, x_data, genus_dic, bottom_data
 
+def get_genus_size(gfilename) :
 
-def load_speciesData(filename) :
+	csv_list, nrows, ncols = csvReader.csv_reader(gfilename)
+
+	genus_size = {}
+
+	for row_num in range(1, nrows) :
+		current_genus = csv_list[row_num][0]
+		genus_size[current_genus] = csv_list[row_num][2:]
+
+	return genus_size
+
+def load_speciesData(filename, gfilename) :
 	#read csv file
 	csv_list, nrows, ncols = csvReader.csv_reader(filename)
+	genus_size = get_genus_size(gfilename)
 
 	x_data = csv_list[0][2:]
 
@@ -56,11 +68,13 @@ def load_speciesData(filename) :
 
 		# print n
 		species_dic[current_genus][n] = {}
-		# print species_dic[current_genus][n]
 
-		species_dic[current_genus][n]['rate']= csv_list[row_num][2:]
-		species_dic[current_genus][n]['name']= current_species
 
-		bottom_data[current_genus][n] = [i+j for i,j in zip(bottom_data[current_genus][n-1], csv_list[row_num][2:])]
+		if genus_size.get(current_genus) != None :
+			#species bar's size is absolute value! not relative!
+			species_dic[current_genus][n]['rate']= [i*j for i,j in zip(csv_list[row_num][2:], genus_size[current_genus])]
+			species_dic[current_genus][n]['name']= current_species
+
+			bottom_data[current_genus][n] = [i+j for i,j in zip(bottom_data[current_genus][n-1], species_dic[current_genus][n]['rate'])]
 
 	return nrows, x_data, species_dic, bottom_data

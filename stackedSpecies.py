@@ -4,14 +4,14 @@ import matplotlib
 # from random import random
 from mouseAction import *
 
-def run(genus, filename) :
+def run(genus, filename, gfilename) :
     
     #set data
-    nrows, x_data, species_dic, bottom_data = load_speciesData(filename)
+    nrows, x_data, species_dic, bottom_data = load_speciesData(filename, gfilename)
 
     #set data to mouseAction
     setGenus(genus)
-    set_speciesData(filename)
+    set_speciesData(filename, gfilename)
     # Create the general blog and the "subplots" i.e. the bars
     f, ax1 = plt.subplots(1, figsize=(12,6))
     plt.subplots_adjust(left=0.1, bottom=0.4, right=None, top=0.9,
@@ -40,7 +40,7 @@ def run(genus, filename) :
     # Set the label and legends
     ax1.set_ylabel("Rate")
     ax1.set_xlabel(genus)
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.4),
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.3),
       fancybox=True, shadow=True, ncol=5, fontsize = 8)
 
     cursor = Cursor(ax1)
@@ -49,6 +49,7 @@ def run(genus, filename) :
 
 if __name__ == "__main__":
     genus_name = 'Moraxella'
-    filename = './data/Total_CRS_species.csv'
-    run(genus_name, filename)
+    genus_filename = './data/Total_CRS_filtered.csv'  
+    species_filename = './data/Total_CRS_species.csv'
+    run(genus_name, species_filename, genus_filename)
 

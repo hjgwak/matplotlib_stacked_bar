@@ -11,7 +11,7 @@ def run(genus_filename, species_filename) :
     
     #set data to mouseAction
     set_genusData(genus_filename)
-    setSpeciesFile(species_filename)
+    setFileName(species_filename, genus_filename)
 
     # Create the general blog and the "subplots" i.e. the bars
     f, ax1 = plt.subplots(1, figsize=(12,6))
@@ -53,5 +53,5 @@ def run(genus_filename, species_filename) :
 
 if __name__ == "__main__":
     genus_filename = './data/Total_CRS_filtered.csv'  
-    species_filename = '.data/Total_CRS_species.csv'
+    species_filename = './data/Total_CRS_species.csv'
     run(genus_filename, species_filename)
