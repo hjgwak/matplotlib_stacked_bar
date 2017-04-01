@@ -52,6 +52,6 @@ def run(genus_filename, species_filename) :
     plt.show()
 
 if __name__ == "__main__":
-    genus_filename = 'Total_CRS_filtered.csv'  
-    species_filename = 'Total_CRS_species.csv'
+    genus_filename = './data/Total_CRS_filtered.csv'  
+    species_filename = '.data/Total_CRS_species.csv'
     run(genus_filename, species_filename)

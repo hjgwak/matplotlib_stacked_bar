@@ -36,7 +36,7 @@ def run(filename, group_filename) :
     plt.show()
 
 if __name__ == "__main__":
-    filename = 'CRS_above_genus.csv'
-    group_filename = 'control_case_group.csv'
+    filename = './data/CRS_above_genus.csv'
+    group_filename = './data/control_case_group.csv'
     run(filename, group_filename)
 

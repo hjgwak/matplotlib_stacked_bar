@@ -60,19 +60,19 @@ class MyDialog(QDialog):
 
     #file upload
     def btnUploadClicked_genus(self) :
-    	self.genus_filename = QFileDialog.getOpenFileName(self, 'Open File', '.', '(*.csv)')
+    	self.genus_filename = QFileDialog.getOpenFileName(self, 'Open File', './data', '(*.csv)')
         filename = os.path.basename(str(self.genus_filename))
         print filename
         self.upload_file_name[0].setText(filename)
         self.setLayout(self.layout)
     def btnUploadClicked_species(self) :
-    	self.species_filename = QFileDialog.getOpenFileName(self, 'Open File', '.', '(*.csv)')
+    	self.species_filename = QFileDialog.getOpenFileName(self, 'Open File', './data', '(*.csv)')
         filename = os.path.basename(str(self.species_filename))
         print filename
         self.upload_file_name[1].setText(filename)
         self.setLayout(self.layout)
     def btnUploadClicked_group(self) :
-    	self.group_filename = QFileDialog.getOpenFileName(self, 'Open File', '.', '(*.csv)')
+    	self.group_filename = QFileDialog.getOpenFileName(self, 'Open File', './data', '(*.csv)')
         filename = os.path.basename(str(self.group_filename))
         print filename
         self.upload_file_name[2].setText(filename)

@@ -122,8 +122,8 @@ def run(filename, group_filename) :
 	plt.show()
 
 if __name__ == "__main__":
-	filename = 'Total_CRS_filtered.csv'
-	group_filename = 'group_name.csv'
+	filename = './data/Total_CRS_filtered.csv'
+	group_filename = './data/group_name.csv'
 	run(filename, group_filename)
 
 
