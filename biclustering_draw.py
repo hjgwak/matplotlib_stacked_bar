@@ -7,6 +7,7 @@ class draw_graph(object):
 	case = []
 	x_label = []
 	y_label = []
+	pvalue_label = []
 	fit_data = []
 	genus_data = []
 	title = []
@@ -19,17 +20,18 @@ class draw_graph(object):
 		self.case = case
 
 	def draw(self) :
-		f, ax1 = plt.subplots(1, figsize=(12,5), dpi=80)
+		f, ax1 = plt.subplots(1, figsize=(14,6), dpi=80)
 
 		plt.subplots_adjust(left=None, bottom=None, right=0.95, top=None,
 		                    wspace=None, hspace=None)
 
-		ax1.matshow(self.fit_data, cmap=plt.cm.Blues)
-		
+		im = ax1.matshow(self.fit_data, cmap=plt.cm.Blues)
+		# plt.colorbar(im, orientation='horizontal')
+
 		plt.title(self.title)
 		
 		ax1.set_xticks(self.x_label)
-		ax1.set_xticklabels(self.control+self.case, fontsize=7)
+		ax1.set_xticklabels(self.control+self.case, fontsize=7, rotation=70)
 		
 		#set label color
 		colors = []
@@ -44,7 +46,16 @@ class draw_graph(object):
 
 
 		ax1.xaxis.set_ticks_position('bottom')
-		plt.yticks(self.y_label, self.genus_data)
+
+		#y axis on left
+		ax1.set_yticks(self.y_label)
+		ax1.set_yticklabels(self.genus_data)
+		ax2 = ax1.twinx()
+		
+		#y axis on right
+		y_data_2 = [len(self.pvalue_label)-n-1 for n in self.y_label]
+		ax2.set_yticks(y_data_2)
+		ax2.set_yticklabels(self.pvalue_label)
 
 		#set legend
 		black_line = mlines.Line2D([], [], color='black',label='control')

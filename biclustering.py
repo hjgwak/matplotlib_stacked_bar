@@ -27,13 +27,14 @@ def biclustering(all_data) :
 		d1.x_label[d1.x[n]] = n
 	d1.genus_data = all_data['genus']
 	d1.y_label = [i for i in np.argsort(model.row_labels_)]
-
+	d1.pvalue_label = all_data['pvalue']
 	d1.draw()
 
 	# biclustering of fixed x-axis domain 
 	d2 = bd.draw_graph(control,case)
 	d2.x_label = [i for i in range(len(control+case))]
-	d2.y_label = d1.y_label
+	d2.y_label = [i for i in np.argsort(model.row_labels_)]
+	d2.pvalue_label = all_data['pvalue']
 	d2.fit_data = y_fit_data
 	d2.genus_data = all_data['genus']
 	d2.x = d2.x_label
@@ -74,6 +75,7 @@ def run(filename, group_filename) :
 	all_data = {}
 	all_data['data'] = []
 	all_data['genus'] = []
+	all_data['pvalue'] = []
 
 	d3 = bd.draw_graph(control, case)
 
@@ -97,10 +99,13 @@ def run(filename, group_filename) :
 		if pvalue < 0.05 :
 			all_data['data'].append(test_control+test_case)
 			all_data['genus'].append(current_genus+"("+str(current_type)[0]+")")
+			all_data['pvalue'].append(round(pvalue,4))
+
 
 
 	d3.x_label = [i for i in range(len(control+case))]
 	d3.y_label = [i for i in range(len(all_data['data']))]
+	d3.pvalue_label = all_data['pvalue']
 
 	d3.fit_data = all_data['data']
 	d3.genus_data = all_data['genus']
@@ -117,8 +122,8 @@ def run(filename, group_filename) :
 	plt.show()
 
 if __name__ == "__main__":
-	filename = 'CRS_above_genus.csv'
-	group_filename = 'control_case_group.csv'
+	filename = 'Total_CRS_filtered.csv'
+	group_filename = 'group_name.csv'
 	run(filename, group_filename)
 
 
