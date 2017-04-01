@@ -1,5 +1,4 @@
 from PyQt4.QtGui import *
-# from PyQt4 import QtCore
 import sys
 import os
 

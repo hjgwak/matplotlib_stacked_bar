@@ -57,7 +57,7 @@ def run(filename, group_filename) :
 	case = []
 	control = [] 
 	for n in range(1, cc_nrows) :
-		if case_control_list[n][1] == 'case' :
+		if case_control_list[n][1].lower() in 'case' :
 			case.append(case_control_list[n][0])
 		else :
 			control.append(case_control_list[n][0])

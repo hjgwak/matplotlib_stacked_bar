@@ -5,30 +5,25 @@ def load_bacterium(filename, group_filename) :
 	#read csv file
 	csv_list, nrows, ncols = csvReader.csv_reader(filename)
 
-	# print nrows, ncols #99, 22
-
 	x_data = csv_list[0][2:]
 
+	#read group file
 	case_control_list, cc_nrows, cc_ncols = csvReader.csv_reader(group_filename)
 		
-
 	target = {}
-	target_names = ['case', 'control']
+	target_names = []
 
 	for n in range(1, cc_nrows) :
-		if case_control_list[n][1] == 'case' :
-			target[case_control_list[n][0]] = 0
-		else :
-			target[case_control_list[n][0]] = 1
+		if not case_control_list[n][1].lower() in target_names :
+			target_names.append(case_control_list[n][1].lower())
 
-	#case : 0 
-	#control : 1
+		target[case_control_list[n][0]] = target_names.index(case_control_list[n][1].lower())
 
 	bacterium = {}
 	feature_data = []
 	feature_group = []
 
-	for col_num in range(2, ncols) : # 2~22
+	for col_num in range(2, ncols) : 
 		feature_name = csv_list[0][col_num]
 		feature_group.append(target[feature_name])
 
@@ -43,6 +38,10 @@ def load_bacterium(filename, group_filename) :
 		bacterium['target_names'] = np.asarray(target_names)
 
 	return bacterium
-	# return np.asarray(feature_data), np.asarray(feature_group)
 
 
+if __name__ == "__main__":
+    filename = './data/Total_CRS_filtered.csv'
+    group_filename = './data/group_name.csv'
+    data = load_bacterium(filename, group_filename)
+    print data
