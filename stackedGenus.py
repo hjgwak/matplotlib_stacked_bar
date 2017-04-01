@@ -15,7 +15,7 @@ def run(genus_filename, species_filename) :
 
     # Create the general blog and the "subplots" i.e. the bars
     f, ax1 = plt.subplots(1, figsize=(12,6))
-    plt.subplots_adjust(left=0.1, bottom=0.5, right=None, top=0.95,
+    plt.subplots_adjust(left=0.1, bottom=0.5, right=None, top=0.9,
                         wspace=None, hspace=None)
 
     # positions of the left bar-boundaries

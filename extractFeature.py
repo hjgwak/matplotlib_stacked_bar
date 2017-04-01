@@ -10,32 +10,37 @@ def load_bacterium(filename, group_filename) :
 	#read group file
 	case_control_list, cc_nrows, cc_ncols = csvReader.csv_reader(group_filename)
 		
-	target = {}
-	target_names = []
+	group = {}
+	group_names = []
 
 	for n in range(1, cc_nrows) :
-		if not case_control_list[n][1].lower() in target_names :
-			target_names.append(case_control_list[n][1].lower())
+		if not case_control_list[n][1].lower() in group_names :
+			group_names.append(case_control_list[n][1].lower())
 
-		target[case_control_list[n][0]] = target_names.index(case_control_list[n][1].lower())
+		group[case_control_list[n][0]] = group_names.index(case_control_list[n][1].lower())
 
 	bacterium = {}
-	feature_data = []
-	feature_group = []
+	sample_data = []
+	group_id = []
+	sample_names = []
+
 
 	for col_num in range(2, ncols) : 
-		feature_name = csv_list[0][col_num]
-		feature_group.append(target[feature_name])
-
+		sample_name = csv_list[0][col_num]
+		group_id.append(group[sample_name])
+		sample_names.append(sample_name)
+		# sample[sample_name] = group[sample_name]
+		
 		data = []
 
 		for row_num in range(1, nrows) :
 			data.append(csv_list[row_num][col_num])
 
-		feature_data.append(data)
-		bacterium['data'] = np.asarray(feature_data)
-		bacterium['target'] = np.asarray(feature_group)
-		bacterium['target_names'] = np.asarray(target_names)
+		sample_data.append(data)
+		bacterium['data'] = np.asarray(sample_data)
+		bacterium['sample'] = np.asarray(sample_names)
+		bacterium['group_id'] = np.asarray(group_id)
+		bacterium['group_names'] = np.asarray(group_names)
 
 	return bacterium
 

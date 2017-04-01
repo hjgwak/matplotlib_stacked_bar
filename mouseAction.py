@@ -55,39 +55,64 @@ class Cursor(object):
     def __init__(self, ax):
         self.ax = ax  
         # text location in axes coords
-        self.txt = ax.text(1.0, 0.0, '', fontsize = 7, transform=ax.transAxes, bbox={'facecolor':'lightgray', 'pad':8})
+        self.txt = ax.text(0.9, 1.06, '', fontsize = 7, transform=ax.transAxes, bbox={'facecolor':'lightgray', 'pad':8})
 
     def mouse_move_genus(self, event):
         if event.inaxes is not None:
             x, hovered_dic = sgs.search(event.xdata, event.ydata, bar_width, genus_dic, bottom_data)
             if x == None :
-                print "out of bars"
+                self.txt.set_text('out of bars')
+                # print "out of bars"
             else : 
                 # print "#",hovered_dic['name'], hovered_dic['type'] , round(hovered_dic['rate'][x],5)
                 name = hovered_dic['name']
                 ty = hovered_dic['type']
                 size = hovered_dic['rate'][x]
                 self.txt.set_text('name=%s\ntype=%s\nsize=%1.3f' % (name, ty, size))
-                plt.draw()
+                # plt.draw()
 
         else:
-            print 'Mouse overed ouside axes bounds but inside plot window'
+            self.txt.set_text('ouside axes bounds')
+            # print 'Mouse overed ouside axes bounds but inside plot window'
 
+        plt.draw()
 
 
     def mouse_move_species(self, event):
         if event.inaxes is not None:
             x, hovered_dic = sgs.search(event.xdata, event.ydata, bar_width, species_dic[genus], bottom_data[genus])
             if x == None :
-                print "out of bars"
+                self.txt.set_text('out of bars')
+                # print "out of bars"
             else : 
                 # print "#",hovered_dic['name'], hovered_dic['type'] , round(hovered_dic['rate'][x],5)
                 name = hovered_dic['name']
                 size = hovered_dic['rate'][x]
                 self.txt.set_text('name=%s\nsize=%1.3f' % (name, size))
-                plt.draw()
+                # plt.draw()
 
         else:
-            print 'Mouse overed ouside axes bounds but inside plot window'
+            self.txt.set_text('ouside axes bounds')
+            # print 'Mouse overed ouside axes bounds but inside plot window'
+        plt.draw()
+
+    def mouse_move_pca(self, event):
+        if event.inaxes is not None:
+            
+            self.txt.set_text('%f , %f'%(event.xdata ,event.ydata))
+            plt.draw()
+
+            # if x == None :
+            #     print "out of scatters"
+            # else : 
+            #     # print "#",hovered_dic['name'], hovered_dic['type'] , round(hovered_dic['rate'][x],5)
+            #     name = hovered_dic['name']
+            #     self.txt.set_text('name='+name)
+            #     plt.draw()
+
+        else:
+            self.txt.set_text('ouside axes bounds')
+        plt.draw()
+            # print 'Mouse overed ouside axes bounds but inside plot window'
 
 
