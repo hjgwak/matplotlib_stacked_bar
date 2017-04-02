@@ -23,12 +23,10 @@ class draw_graph(object):
 
 	def draw(self) :
 		f, ax1 = plt.subplots(1)
-		# f, ax1 = plt.subplots(1, figsize=(14,6), dpi=80)
 		plt.subplots_adjust(left=0.2, bottom=None, right=0.9, top=None,
 		                    wspace=None, hspace=None)
-
-		im = ax1.imshow(self.fit_data, cmap=plt.cm.Blues)
-		ax1.set_aspect('auto')
+			# plt.cm.Blues
+		im = ax1.imshow(self.fit_data, cmap=plt.cm.GnBu, aspect='auto')
 		plt.colorbar(im, orientation='horizontal')
 
 		plt.title(self.title)
@@ -42,7 +40,7 @@ class draw_graph(object):
 			if self.x[n] < len(self.group1) :
 				colors.append('black')
 			else:
-				colors.append('red')
+				colors.append('lightseagreen')
 		
 		#set the axis label color
 		for color,tick in zip(colors,ax1.xaxis.get_major_ticks()):
@@ -54,9 +52,6 @@ class draw_graph(object):
 		ax1.tick_params(labelbottom='on',labeltop='off', labelleft="on", 
     		top='off', left='off', right='off')
 		
-		# fig = plt.gcf()
-		# size = fig.get_size_inches()*fig.dpi
-		# print size
 		#y axis on right
 		ax2 = f.add_axes(ax1.get_position(), frameon=False)
 		ax2.set_yticks(self.y_label, minor=False)
@@ -67,6 +62,6 @@ class draw_graph(object):
 
 		#set legend
 		black_line = mlines.Line2D([], [], color='black',label=self.checked[0])
-		red_line = mlines.Line2D([], [], color='red',label=self.checked[1])
-		plt.legend(handles=[black_line, red_line],loc='lower right', bbox_to_anchor=(1., 1.), fontsize =7)
+		blue_line = mlines.Line2D([], [], color='lightseagreen',label=self.checked[1])
+		plt.legend(handles=[black_line, blue_line],loc='lower right', bbox_to_anchor=(1., 1.), fontsize =7)
 

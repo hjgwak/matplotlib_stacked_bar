@@ -128,7 +128,7 @@ def run(filename, group_filename, checked) :
 if __name__ == "__main__":
 	filename = './data/Total_CRS_filtered.csv'
 	group_filename = './data/group_name.csv'
-	checked = ['case','etc']
+	checked = ['case','control']
 	run(filename, group_filename, checked)
 
 
