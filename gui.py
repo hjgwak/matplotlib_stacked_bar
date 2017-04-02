@@ -30,7 +30,7 @@ class CheckBox(QWidget):
             layout.addWidget(self.btn[n])
         
         layout.addWidget(btnOk)
-
+        #limit with 2 check
         self.setLayout(layout)
         self.setWindowTitle("select two groups")
 

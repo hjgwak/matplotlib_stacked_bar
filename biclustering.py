@@ -46,27 +46,28 @@ def biclustering(all_data) :
 
 def run(filename, group_filename, checked) :
 	#read csv file
-	print checked
 	csv_list, nrows, ncols = csvReader.csv_reader(filename)
 
 	x_data = csv_list[0][2:]
 
-	case_control_list, cc_nrows, cc_ncols = csvReader.csv_reader(group_filename)
-
+	#load group file
 	group, group_names = load_groupData(group_filename)
 
-	print group, group_names
 	global group1 
 	global group2
 
 	group1 = []
 	group2 = [] 
-	
-	for n in range(1, cc_nrows) :
-		if case_control_list[n][1].lower() in 'case' :
-			group1.append(case_control_list[n][0])
-		else :
-			group2.append(case_control_list[n][0])
+
+	#separate group1 and group2 
+	for n in range(len(group)) :
+		group1_i = group_names.index(checked[0])
+		group2_i = group_names.index(checked[1])
+
+		if group.values()[n] == group1_i :
+			group1.append(group.keys()[n])
+		elif group.values()[n] == group2_i :
+			group2.append(group.keys()[n])
 
 	group1_ind = []
 	group2_ind = []
@@ -91,9 +92,9 @@ def run(filename, group_filename, checked) :
 		current_genus = csv_list[row_num][0]
 		current_type = csv_list[row_num][1]
 		
-		test_group2 = []
 		test_group1 = []
-
+		test_group2 = []
+		
 		for coni in group2_ind :
 			test_group2.append(csv_list[row_num][2+coni])
 		for casi in group1_ind :
@@ -106,7 +107,6 @@ def run(filename, group_filename, checked) :
 			all_data['data'].append(test_group2+test_group1)
 			all_data['genus'].append(current_genus+"("+str(current_type)[0]+")")
 			all_data['pvalue'].append(round(pvalue,4))
-
 
 
 	d3.x_label = [i for i in range(len(group2+group1))]
@@ -130,7 +130,7 @@ def run(filename, group_filename, checked) :
 if __name__ == "__main__":
 	filename = './data/Total_CRS_filtered.csv'
 	group_filename = './data/group_name.csv'
-	checked = []
+	checked = ['case','control']
 	run(filename, group_filename, checked)
 
 
