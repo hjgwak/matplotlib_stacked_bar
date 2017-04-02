@@ -6,6 +6,7 @@ import csvReader
 
 def run(filename, group_filename) :
     csv_list, nrows, ncols = csvReader.csv_reader(filename)
+    
     bacterium = load_bacterium(filename, group_filename)
     X = bacterium['data']
     y = bacterium['group_id']
@@ -31,15 +32,10 @@ def run(filename, group_filename) :
         plt.axis([-1, 1, -0.5, 0.5])
 
     #loadings
-    # print len(csv_list)
-    # print len(pca.components_[0])
     for i in range(len(pca.components_[0])):
         x, y = pca.components_[0][i], pca.components_[1][i]
-        # print x,y
         if x>0.3 or y > 0.3 :
-            # print csv_list[i][0]
-            plt.arrow(0, 0, x*0.5, y*0.5, color='salmon',
-                      width=0.001, head_width=0.01)
+            plt.arrow(0, 0, x*0.5, y*0.5, color='salmon', width=0.001, head_width=0.01)
             plt.text(x*0.25, y*0.25 , csv_list[i+1][0], color='salmon', ha='center', va='center', fontsize = 7)
 
 

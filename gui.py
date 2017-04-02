@@ -51,8 +51,10 @@ class CheckBox(QWidget):
             if self.btn[n].isChecked() == True :
                 checked.append(self.btn[n].text())
                 count = count +1
+                
         #biclustering needs only two groups.
         if count == 2 :
+            print "'",str(checked[0]),"' and '",str(checked[1]),"' are checked."
             self.close()
         else :
             QMessageBox.information(self, "Info", "please check two groups")
