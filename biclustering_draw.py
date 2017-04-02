@@ -15,11 +15,18 @@ class draw_graph(object):
 
 	checked = []
 
-	def __init__(self, group1, group2, checked):
+	def __init__(self, group1, group2, checked, x_label, y_label, x, pvalue_label, fit_data, genus_data, title):
 		super(draw_graph, self).__init__()
 		self.group1 = group1
 		self.group2 = group2
 		self.checked = checked
+		self.x_label = x_label
+		self.y_label = y_label
+		self.x = x
+		self.pvalue_label = pvalue_label
+		self.fit_data = fit_data
+		self.genus_data = genus_data
+		self.title = title
 
 	def draw(self) :
 		f, ax1 = plt.subplots(1)

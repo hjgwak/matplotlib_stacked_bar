@@ -1,13 +1,14 @@
-import numpy as np
 import matplotlib.pyplot as plt
 from extractFeature import load_bacterium
 from sklearn.decomposition import PCA
 import csvReader
 
-def run(filename, group_filename) :
-    csv_list, nrows, ncols = csvReader.csv_reader(filename)
+def run(genus_filename, group_filename) :
+    #load genus file
+    csv_list, nrows, ncols = csvReader.csv_reader(genus_filename)
     
-    bacterium = load_bacterium(filename, group_filename)
+    #load bacterium data
+    bacterium = load_bacterium(genus_filename, group_filename)
     X = bacterium['data']
     y = bacterium['group_id']
     group_names = bacterium['group_names']
@@ -15,14 +16,13 @@ def run(filename, group_filename) :
     n_components = 2
     
     pca = PCA(n_components=n_components)
-
     X_pca = pca.fit_transform(X)
-
 
     colors = ['navy', 'turquoise', 'darkorange', 'green', 'yellow' ]
 
     f, ax1 = plt.subplots(1, figsize=(6,6))
 
+    #draw scatters
     for X_transformed, title in [(X_pca, "PCA")]:
         for color, i, group_name in zip(colors, range(len(group_names)), group_names):
             plt.scatter(X_transformed[y == i, 0], X_transformed[y == i, 1],
@@ -48,7 +48,7 @@ def run(filename, group_filename) :
 
 
 if __name__ == "__main__":
-    filename = './data/Total_CRS_filtered.csv'
+    genus_filename = './data/Total_CRS_filtered.csv'
     group_filename = './data/group_name.csv'
-    run(filename, group_filename)
+    run(genus_filename, group_filename)
 

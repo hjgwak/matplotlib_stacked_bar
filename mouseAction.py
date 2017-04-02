@@ -7,23 +7,23 @@ import stackedSpecies
 bar_width = 0.35
 
 #set data
-def set_genusData(filename) :
+def set_genusData(gfilename) :
     global genus_dic
-    global bottom_data
+    global g_bottom_data
     global nrows
     global x_data
 
-    nrows, x_data, genus_dic, bottom_data = load_genusData(filename)
+    nrows, x_data, genus_dic, g_bottom_data = load_genusData(gfilename)
 
 
 #set data
-def set_speciesData(filename, gfilename) :
+def set_speciesData(sfilename, gfilename) :
     global species_dic
-    global bottom_data
+    global s_bottom_data
     global nrows
     global x_data
 
-    nrows, x_data, species_dic, bottom_data = load_speciesData(filename, gfilename)
+    nrows, x_data, species_dic, s_bottom_data = load_speciesData(sfilename, gfilename)
 
 
 def setFileName(sfilename, gfilename) :
@@ -38,8 +38,7 @@ def setGenus(genus_name) :
 
 def on_click(event):
     if event.inaxes is not None:
-        # print event.xdata, event.ydata
-        x, clicked_dic = sgs.search(event.xdata, event.ydata, bar_width, genus_dic, bottom_data)
+        x, clicked_dic = sgs.search(event.xdata, event.ydata, bar_width, genus_dic, g_bottom_data)
         if x == None :
             print "out of bars"
         else :
@@ -49,20 +48,6 @@ def on_click(event):
                 print clicked_dic['type'] ,"can be splited by species"
     else:
         print 'Clicked ouside axes bounds but inside plot window'
-
-# class Click(object) :
-#     sample_names  = []
-#     X_pca = []
-    
-#     # def __init__(self, ax):
-#     #     self.ax = ax  
-
-#     def pca_show(self, event):
-#         for label, x, y in zip(self.sample_names, self.X_pca[:,0], self.X_pca[:,1]):
-#             plt.annotate( label, xy=(x, y), xytext=(-2, 2), textcoords='offset points',
-#                 ha='right', va='bottom', fontsize = 6, color = 'gray')
-
-#         plt.draw()
 
 class Cursor(object):
     
@@ -74,43 +59,30 @@ class Cursor(object):
 
     def mouse_move_genus(self, event):
         if event.inaxes is not None:
-            x, hovered_dic = sgs.search(event.xdata, event.ydata, bar_width, genus_dic, bottom_data)
+            x, hovered_dic = sgs.search(event.xdata, event.ydata, bar_width, genus_dic, g_bottom_data)
             if x == None :
                 self.txt.set_text('out of bars')
-                # print "out of bars"
             else : 
-                # print "#",hovered_dic['name'], hovered_dic['type'] , round(hovered_dic['rate'][x],5)
                 name = hovered_dic['name']
                 ty = hovered_dic['type']
                 size = hovered_dic['rate'][x]
                 self.txt.set_text('name=%s\ntype=%s\nsize=%1.3f' % (name, ty, size))
-                # plt.draw()
-
         else:
             self.txt.set_text('ouside axes bounds')
-            # print 'Mouse overed ouside axes bounds but inside plot window'
 
         plt.draw()
 
 
     def mouse_move_species(self, event):
         if event.inaxes is not None:
-            x, hovered_dic = sgs.search(event.xdata, event.ydata, bar_width, species_dic[genus], bottom_data[genus])
+            x, hovered_dic = sgs.search(event.xdata, event.ydata, bar_width, species_dic[genus], s_bottom_data[genus])
             if x == None :
                 self.txt.set_text('out of bars')
-                # print "out of bars"
             else : 
-                # print "#",hovered_dic['name'], hovered_dic['type'] , round(hovered_dic['rate'][x],5)
                 name = hovered_dic['name']
                 size = hovered_dic['rate'][x]
                 self.txt.set_text('name=%s\nsize=%1.3f' % (name, size))
-                # plt.draw()
 
         else:
             self.txt.set_text('ouside axes bounds')
-            # print 'Mouse overed ouside axes bounds but inside plot window'
         plt.draw()
-
-
-
-

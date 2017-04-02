@@ -33,10 +33,7 @@ def csv_reader(filename) :
 	        csv_list.append(distributedTypeList(cols))
 	        nrows = nrows +1
 
-	# nrows = len(lines)
 	ncols = len(cols)
-
-	# print csv_list
 
 	return csv_list, nrows, ncols
 

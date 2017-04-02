@@ -4,14 +4,14 @@ import matplotlib
 # from random import random
 from mouseAction import *
 
-def run(genus, filename, gfilename) :
+def run(genus, sfilename, gfilename) :
     
     #set data
-    nrows, x_data, species_dic, bottom_data = load_speciesData(filename, gfilename)
+    nrows, x_data, species_dic, bottom_data = load_speciesData(sfilename, gfilename)
 
     #set data to mouseAction
     setGenus(genus)
-    set_speciesData(filename, gfilename)
+    set_speciesData(sfilename, gfilename)
     # Create the general blog and the "subplots" i.e. the bars
     f, ax1 = plt.subplots(1, figsize=(12,6))
     plt.subplots_adjust(left=0.1, bottom=0.4, right=None, top=0.9,

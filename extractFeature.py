@@ -2,9 +2,9 @@ import csvReader
 import numpy as np
 from loadData import load_groupData
 
-def load_bacterium(filename, group_filename) :
+def load_bacterium(genus_filename, group_filename) :
 	#read csv file
-	csv_list, nrows, ncols = csvReader.csv_reader(filename)
+	csv_list, nrows, ncols = csvReader.csv_reader(genus_filename)
 
 	#read group file
 	group, group_names = load_groupData(group_filename)
@@ -34,7 +34,7 @@ def load_bacterium(filename, group_filename) :
 
 
 if __name__ == "__main__":
-    filename = './data/Total_CRS_filtered.csv'
+    genus_filename = './data/Total_CRS_filtered.csv'
     group_filename = './data/group_name.csv'
-    data = load_bacterium(filename, group_filename)
+    data = load_bacterium(genus_filename, group_filename)
     print data

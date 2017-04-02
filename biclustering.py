@@ -18,31 +18,36 @@ def biclustering(filtered, checked) :
 	data = np.asarray(filtered['data'])
 	model.fit(data)
 
-	d1 = bd.draw_graph(group1, group2, checked)
 	#biclustering
 	y_fit_data = data[np.argsort(model.row_labels_)]
-	d1.fit_data = y_fit_data[:, np.argsort(model.column_labels_)]
+	fit_data = y_fit_data[:, np.argsort(model.column_labels_)]
 
 	#set x label
-	d1.x = np.argsort(model.column_labels_)
-	d1.x_label = [0 for i in range(len(d1.x))]
-	for n in range(len(d1.x)) :
-		d1.x_label[d1.x[n]] = n
-	d1.y_label = [i for i in np.argsort(model.row_labels_)]
-	d1.genus_data = filtered['genus']
-	d1.pvalue_label = filtered['pvalue']
-	d1.title = "After biclustering"
+	x = np.argsort(model.column_labels_)
+	x_label = [0 for i in range(len(x))]
+	for n in range(len(x)) :
+		x_label[x[n]] = n
+
+	d1 = bd.draw_graph(group1, group2, checked,
+		x = x, x_label = x_label,
+		y_label = [i for i in np.argsort(model.row_labels_)],
+		fit_data = fit_data,
+		genus_data = filtered['genus'],
+		pvalue_label = filtered['pvalue'],
+		title = "After biclustering")
+		
 	d1.draw()
 
 	# biclustering of fixed x-axis domain 
-	d2 = bd.draw_graph(group1, group2, checked)
-	d2.x_label = [i for i in range(len(group1+group2))]
-	d2.y_label = [i for i in np.argsort(model.row_labels_)]
-	d2.x = d2.x_label
-	d2.fit_data = y_fit_data
-	d2.genus_data = filtered['genus']
-	d2.pvalue_label = filtered['pvalue']
-	d2.title = "After biclustering; fixed x domins "
+	d2 = bd.draw_graph(group1, group2, checked,
+		x_label = [i for i in range(len(group1+group2))],
+		y_label = [i for i in np.argsort(model.row_labels_)],
+		x = x_label,
+		fit_data = y_fit_data,
+		genus_data = filtered['genus'],
+		pvalue_label = filtered['pvalue'],
+		title = "After biclustering; fixed x domins")
+
 	d2.draw()
 
 
@@ -82,8 +87,6 @@ def run(filename, group_filename, checked) :
 	filtered['genus'] = []
 	filtered['pvalue'] = []
 
-	#it should be changed !! 
-	d3 = bd.draw_graph(group1, group2, checked)
 
 	#extract data which have low pvalue
 	for row_num in range(1,nrows):
@@ -107,14 +110,14 @@ def run(filename, group_filename, checked) :
 			filtered['genus'].append(current_genus+"("+str(current_type)[0]+")")
 			filtered['pvalue'].append(round(pvalue,4))
 
-
-	d3.x_label = [i for i in range(len(group1+group2))]
-	d3.y_label = [i for i in range(len(filtered['data']))]
-	d3.pvalue_label = filtered['pvalue']
-	d3.fit_data = filtered['data']
-	d3.genus_data = filtered['genus']
-	d3.title = "Original dataset"
-	d3.x = d3.x_label
+	d3 = bd.draw_graph(group1, group2, checked, 
+		x_label = [i for i in range(len(group1+group2))], 
+		y_label=[i for i in range(len(filtered['data']))], 
+		pvalue_label = filtered['pvalue'],
+		fit_data = filtered['data'],
+		genus_data = filtered['genus'],
+		title = "Original dataset",
+		x = [i for i in range(len(group1+group2))])
 
 	d3.draw()
 
