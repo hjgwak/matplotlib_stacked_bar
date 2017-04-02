@@ -24,7 +24,7 @@ class CheckBox(QWidget):
         self.btn = []
         for n in range(len(self.buttonList)) :
             self.btn.append(QCheckBox(self.buttonList[n]))
-            if n < 2 :
+            if n < 2 : #checked first 2 boxes
                 self.btn[n].setChecked(True)
             self.btn[n].toggled.connect(lambda:self.btnstate(self.btn[n]))
             layout.addWidget(self.btn[n])
@@ -38,20 +38,25 @@ class CheckBox(QWidget):
 
     # just working
     def btnstate(self,b):
-        for n in range(len(self.buttonList)) :
-            if b.text() == self.buttonList[n] :
-                if b.isChecked() == True :
-                    print b.text()+" is selected"
-                else:
-                    print b.text()+" is deselected"
+        if b.isChecked() == True :
+            print b.text()+" is selected"
+        else:
+            print b.text()+" is deselected"
     
     def btnOkClicked(self) :
         global checked
         checked = []
+        count = 0
         for n in range(len(self.buttonList)) :
             if self.btn[n].isChecked() == True :
                 checked.append(self.btn[n].text())
-        self.close()
+                count = count +1
+        #biclustering needs only two groups.
+        if count == 2 :
+            self.close()
+        else :
+            QMessageBox.information(self, "Info", "please check two groups")
+
 
 
 class MyDialog(QDialog):
@@ -141,14 +146,20 @@ class MyDialog(QDialog):
 	    idx = self.cbo.currentIndex()
 
 	    if idx == 0 : #Stacked Bar
-	    	stackedGenus.run(self.genus_filename, self.species_filename)
-	    elif idx == 1 : #Biclustering
-	    	biclustering.run(self.genus_filename, self.group_filename, checked)
+             try : 
+                stackedGenus.run(self.genus_filename, self.species_filename)
+             except :
+                QMessageBox.information(self, "Info", "genus file and species file should be uploaded.")
+ 	    elif idx == 1 : #Biclustering
+             try :
+	    	    biclustering.run(self.genus_filename, self.group_filename, checked)
+             except :
+                QMessageBox.information(self, "Info", "genus file and group file should be uploaded.")
 	    elif idx ==2 : #PCA
-	    	pca.run(self.genus_filename, self.group_filename)
-	    else :
-			QMessageBox.information(self, "Info", "ERROR")
-
+	    	try :
+                 pca.run(self.genus_filename, self.group_filename)
+                except :
+                 QMessageBox.information(self, "Info", "genus file and group file should be uploaded.")
 
 # App
 app = QApplication([])
