@@ -9,7 +9,7 @@ from loadData import load_groupData
 def biclustering(filtered, checked) :
 
 	### over 2 
-	if len(filtered) >2 :
+	if len(filtered) >= 2 :
 		n_clusters = (2, 2)
 	else :
 		n_clusters = (1, 1)
