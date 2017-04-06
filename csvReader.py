@@ -1,5 +1,6 @@
 import csv 
 import re
+import io
 
 def is_number(num):
     try:
@@ -21,7 +22,7 @@ def distributedTypeList(cols) :
 
 
 def csv_reader(filename) :
-	f = open(filename, "r")
+	f = io.open(filename, "r", encoding="utf-8-sig")
 	lines = re.split("\r|\n", f.read())
 
 	csv_list = []

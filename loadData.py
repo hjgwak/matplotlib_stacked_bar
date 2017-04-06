@@ -7,7 +7,7 @@ def load_groupData(group_filename) :
 	group = {}
 	group_names = []
 
-	for n in range(1, nrows) :
+	for n in range(nrows) :
 		if not csv_list[n][1].lower() in group_names :
 			group_names.append(csv_list[n][1].lower())
 
