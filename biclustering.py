@@ -42,7 +42,7 @@ def biclustering(filtered, checked) :
 	d2 = bd.draw_graph(group1, group2, checked,
 		x_label = [i for i in range(len(group1+group2))],
 		y_label = [i for i in np.argsort(model.row_labels_)],
-		x = x_label,
+		x = [i for i in range(len(group1+group2))],
 		fit_data = y_fit_data,
 		genus_data = filtered['genus'],
 		pvalue_label = filtered['pvalue'],
