@@ -22,7 +22,7 @@ def distributedTypeList(cols) :
 
 
 def csv_reader(filename) :
-	f = io.open(filename, "r", encoding="utf-8-sig")
+	f = io.open(str(filename), "r", encoding="utf-8-sig")
 	lines = re.split("\r|\n", f.read())
 
 	csv_list = []
