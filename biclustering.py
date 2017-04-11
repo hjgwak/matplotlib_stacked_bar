@@ -9,7 +9,7 @@ from loadData import load_groupData
 def biclustering(filtered, checked) :
 
 	### over 2 
-	if len(filtered) >= 2 :
+	if len(filtered['data']) >= 2 :
 		n_clusters = (2, 2)
 	else :
 		n_clusters = (1, 1)
@@ -22,6 +22,12 @@ def biclustering(filtered, checked) :
 	y_fit_data = data[np.argsort(model.row_labels_)]
 	fit_data = y_fit_data[:, np.argsort(model.column_labels_)]
 
+	#set y label
+	y = np.argsort(model.row_labels_)
+	y_label = [0 for i in range(len(y))]
+	for n in range(len(y)) :
+		y_label[y[n]] = n
+
 	#set x label
 	x = np.argsort(model.column_labels_)
 	x_label = [0 for i in range(len(x))]
@@ -30,7 +36,7 @@ def biclustering(filtered, checked) :
 
 	d1 = bd.draw_graph(group1, group2, checked,
 		x = x, x_label = x_label,
-		y_label = [i for i in np.argsort(model.row_labels_)],
+		y_label = y_label,
 		fit_data = fit_data,
 		genus_data = filtered['genus'],
 		pvalue_label = filtered['pvalue'],
@@ -41,7 +47,7 @@ def biclustering(filtered, checked) :
 	# biclustering of fixed x-axis domain 
 	d2 = bd.draw_graph(group1, group2, checked,
 		x_label = [i for i in range(len(group1+group2))],
-		y_label = [i for i in np.argsort(model.row_labels_)],
+		y_label = y_label,
 		x = [i for i in range(len(group1+group2))],
 		fit_data = y_fit_data,
 		genus_data = filtered['genus'],
@@ -121,7 +127,7 @@ def run(filename, group_filename, checked) :
 
 	d3.draw()
 
-	if len(filtered) > 0 :
+	if len(filtered['data']) > 0 :
 		biclustering(filtered, checked)
 	else :
 		print "no data"
@@ -129,9 +135,9 @@ def run(filename, group_filename, checked) :
 	plt.show()
 
 if __name__ == "__main__":
-	filename = './data/Total_CRS_filtered.csv'
-	group_filename = './data/group_name.csv'
-	checked = ['case','control']
+	filename = './data/Cirrhosis_filtered.csv'
+	group_filename = './data/Cirrhosis_reason_group.csv'
+	checked = ['virus','normal']
 	run(filename, group_filename, checked)
 
 
