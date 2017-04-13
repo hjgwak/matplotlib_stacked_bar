@@ -75,6 +75,7 @@ class MyDialog(QDialog):
 
         self.cbo.addItem("Stacked Bar")
         self.cbo.addItem("Biclustering")
+        self.cbo.addItem("Paired T-test")
         self.cbo.addItem("PCA")
 
         upload_lable = []
@@ -137,7 +138,7 @@ class MyDialog(QDialog):
     #biclustering needs 2 groups
     def selectionChanged(self):
         idx = self.cbo.currentIndex()
-        if idx == 1 :
+        if idx == 1 or idx == 2:
             ex = CheckBox()
             x, ex.buttonList = load_groupData(self.group_filename)
             ex.create()
@@ -154,10 +155,15 @@ class MyDialog(QDialog):
                 QMessageBox.information(self, "Info", "genus file and species file should be uploaded.")
  	    elif idx == 1 : #Biclustering
              try :
-	    	    biclustering.run(self.genus_filename, self.group_filename, checked)
+	    	    biclustering.run(self.genus_filename, self.group_filename, False, checked)
              except :
                 QMessageBox.information(self, "Info", "genus file and group file should be uploaded.")
-	    elif idx ==2 : #PCA
+            elif idx == 2 : #Paired T-test
+             try :
+	    	    biclustering.run(self.genus_filename, self.group_filename, True, checked)
+             except :
+                QMessageBox.information(self, "Info", "genus file and group file should be uploaded.")
+	    elif idx == 3 : #PCA
 	    	try :
                  pca.run(self.genus_filename, self.group_filename)
                 except :

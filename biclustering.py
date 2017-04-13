@@ -57,7 +57,7 @@ def biclustering(filtered, checked) :
 	d2.draw()
 
 
-def run(filename, group_filename, checked) :
+def run(filename, group_filename, paired, checked) :
 	#read csv file
 	csv_list, nrows, ncols = csvReader.csv_reader(filename)
 
@@ -109,7 +109,10 @@ def run(filename, group_filename, checked) :
 			test_group2.append(csv_list[row_num][2+i])
 
 		# calculate pvalue
-		pvalue = sci.ttest_ind(test_group1, test_group2, equal_var=True)[1]
+		if paired :
+                        pvalue = sci.ttest_rel(test_group1, test_gruop2)[1]
+                else :
+                        pvalue = sci.ttest_ind(test_group1, test_group2, equal_var=True)[1]
 
 		if pvalue < 0.05 :
 			filtered['data'].append(test_group1+test_group2)
