@@ -1,48 +1,40 @@
 import csvReader
 import numpy as np
+from loadData import load_groupData
 
-def load_bacterium(filename, group_filename) :
+def load_bacterium(genus_filename, group_filename) :
 	#read csv file
-	csv_list, nrows, ncols = csvReader.csv_reader(filename)
+	csv_list, nrows, ncols = csvReader.csv_reader(genus_filename)
 
-	# print nrows, ncols #99, 22
-
-	x_data = csv_list[0][2:]
-
-	case_control_list, cc_nrows, cc_ncols = csvReader.csv_reader(group_filename)
-		
-
-	target = {}
-	target_names = ['case', 'control']
-
-	for n in range(1, cc_nrows) :
-		if case_control_list[n][1] == 'case' :
-			target[case_control_list[n][0]] = 0
-		else :
-			target[case_control_list[n][0]] = 1
-
-	#case : 0 
-	#control : 1
+	#read group file
+	group, group_names = load_groupData(group_filename)
 
 	bacterium = {}
-	feature_data = []
-	feature_group = []
+	sample_data = []
+	group_id = []
+	sample_names = []
 
-	for col_num in range(2, ncols) : # 2~22
-		feature_name = csv_list[0][col_num]
-		feature_group.append(target[feature_name])
-
+	for col_num in range(2, ncols) : 
+		sample_name = csv_list[0][col_num]
+		group_id.append(group[sample_name])
+		sample_names.append(sample_name)
+		
 		data = []
 
 		for row_num in range(1, nrows) :
 			data.append(csv_list[row_num][col_num])
 
-		feature_data.append(data)
-		bacterium['data'] = np.asarray(feature_data)
-		bacterium['target'] = np.asarray(feature_group)
-		bacterium['target_names'] = np.asarray(target_names)
+		sample_data.append(data)
+		bacterium['data'] = np.asarray(sample_data)
+		bacterium['sample'] = np.asarray(sample_names)
+		bacterium['group_id'] = np.asarray(group_id)
+		bacterium['group_names'] = np.asarray(group_names)
 
 	return bacterium
-	# return np.asarray(feature_data), np.asarray(feature_group)
 
 
+if __name__ == "__main__":
+    genus_filename = './data/Total_CRS_filtered.csv'
+    group_filename = './data/group_name.csv'
+    data = load_bacterium(genus_filename, group_filename)
+    print data
