@@ -150,7 +150,7 @@ class MyDialog(QDialog):
 
 	    if idx == 0 : #Stacked Bar
              try : 
-                stackedGenus.run(self.genus_filename, self.species_filename)
+                stackedGenus.run(self.genus_filename, self.species_filename, 5)
              except :
                 QMessageBox.information(self, "Info", "genus file and species file should be uploaded.")
  	    elif idx == 1 : #Biclustering

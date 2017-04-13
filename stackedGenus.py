@@ -4,8 +4,9 @@ import stackedSpecies
 import matplotlib
 # from random import random
 from mouseAction import *
+import operator
 
-def run(genus_filename, species_filename) :
+def run(genus_filename, species_filename, topN) :
     #set data
     nrows, x_data, genus_dic, bottom_data = load_genusData(genus_filename)
     
@@ -23,15 +24,27 @@ def run(genus_filename, species_filename) :
 
     # colors = [(0.3+random()*0.6,0.3+random()*0.6,0.3+random()*0.6) for i in xrange(nrows)]
 
+    # get topN genus
+    genus_proportion_dic = {}
+    for n in range(1, nrows) :
+        gd = genus_dic[n]
+        genus_proportion_dic[gd['name']] = sum(gd['rate'])
+    genus_proportion_dic = sorted(genus_proportion_dic.items(), key=operator.itemgetter(1), reverse=True)
+    topN_list = [genus[0] for genus in genus_proportion_dic[:topN]]
+
     # Create a bar plot, in position bar_l
     for n in range(1, nrows) :
         gd = genus_dic[n]
+
+        label_txt = None
+        if gd['name'] in topN_list :
+            label_txt = "%s(%s)" % (gd['name'], gd['type'][0])
 
         ax1.bar(bar_l, 
         gd['rate'], 
         width = bar_width, 
         bottom = bottom_data[n-1],
-        label = gd['name'] +"("+str(gd['type'])[0]+")", #genus(type)
+        label = label_txt, #genus(type)
         # color = colors[n-1], 
         alpha = 0.5)
 
